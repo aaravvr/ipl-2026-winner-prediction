@@ -30,6 +30,7 @@ IPL/
 |-- prepare_ball_by_ball_data.py
 |-- prepare_fixture_schedule.py
 |-- prepare_player_strength_features.py
+|-- prepare_team_squads.py
 |-- train.py
 |-- simulate_2026.py
 `-- requirements.txt
@@ -96,6 +97,13 @@ These are generated from the ball-by-ball source and let the model incorporate p
 
 This file lets you encode current-season expectations such as overall squad strength, batting upside, and bowling depth for 2026.
 
+### Official IPLT20 squads files
+
+- `data/raw/team_overview_2026.csv`
+- `data/raw/team_squads_2026.csv`
+
+These are extracted from the official IPL team pages and capture 2026 captains, coaches, venues, and squad membership by role group.
+
 ## Quick start
 
 1. Create a virtual environment and install dependencies.
@@ -108,6 +116,7 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 python prepare_fixture_schedule.py --source C:\Users\aarav\Desktop\1774525332894_TATA_IPL_2026-Schedule.pdf
+python prepare_team_squads.py
 python prepare_ball_by_ball_data.py --source C:\Users\aarav\Desktop\IPL.csv
 python prepare_player_strength_features.py --source C:\Users\aarav\Desktop\IPL.csv
 python train.py
@@ -135,4 +144,5 @@ python simulate_2026.py --n-simulations 5000
 - It can also extract the official 2026 league-stage fixture list from the schedule PDF.
 - It can also derive optional player-based team strength features from the same source before training.
 - It can also apply editable 2026 team priors during simulation to reflect current-season expectations.
+- It can also extract official 2026 team squads, captains, and venues from IPLT20 team pages.
 - The current setup is team-level. The next major upgrade would be player-level strength, expected XIs, injuries, auction outcomes, and venue-adjusted batting or bowling features.
