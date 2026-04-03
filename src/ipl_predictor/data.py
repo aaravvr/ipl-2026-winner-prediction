@@ -12,6 +12,19 @@ TEAM_ALIASES = {
     "Rising Pune Supergiant": "Rising Pune Supergiants",
 }
 
+PLAYER_ALIASES = {
+    "Lungisani Ngidi": "Lungi Ngidi",
+    "L Ngidi": "Lungi Ngidi",
+    "N Tilak Varma": "Tilak Varma",
+    "Shahbaz Ahamad": "Shahbaz Ahmad",
+    "Shahbaz Ahmed": "Shahbaz Ahmad",
+    "T. Natarajan": "T Natarajan",
+    "Mohammed Shami": "Mohammad Shami",
+    "Nithish Kumar Reddy": "Nitish Kumar Reddy",
+    "Vaibhav Suryavanshi": "Vaibhav Sooryavanshi",
+    "V Suryavanshi": "Vaibhav Sooryavanshi",
+}
+
 
 def normalize_team_name(team: object) -> object:
     if pd.isna(team):
@@ -27,6 +40,23 @@ def normalize_team_columns(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame
     for column in columns:
         if column in normalized.columns:
             normalized[column] = normalized[column].map(normalize_team_name)
+    return normalized
+
+
+def normalize_player_name(player: object) -> object:
+    if pd.isna(player):
+        return player
+    player_name = " ".join(str(player).replace(".", " ").split()).strip()
+    if not player_name or player_name == "Unknown":
+        return pd.NA
+    return PLAYER_ALIASES.get(player_name, player_name)
+
+
+def normalize_player_columns(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
+    normalized = df.copy()
+    for column in columns:
+        if column in normalized.columns:
+            normalized[column] = normalized[column].map(normalize_player_name)
     return normalized
 
 

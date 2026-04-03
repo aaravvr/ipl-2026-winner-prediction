@@ -8,7 +8,7 @@ Royal Challengers Bengaluru,starting_xi,Romario Shepherd,All Rounders,
 Royal Challengers Bengaluru,starting_xi,Krunal Pandya,All Rounders,
 Royal Challengers Bengaluru,starting_xi,Bhuvneshwar Kumar,Bowlers,
 Royal Challengers Bengaluru,starting_xi,Abhinandan Singh,Bowlers,
-Royal Challengers Bengaluru,starting_xi,Jacob Duffy,Bowlers,replaced player when impact sub is used
+Royal Challengers Bengaluru,replaced_player,Jacob Duffy,Bowlers,replaced player when impact sub is used
 Royal Challengers Bengaluru,starting_xi,Suyash Sharma,Bowlers,
 Royal Challengers Bengaluru,impact_player,Devdutt Padikkal,Batters,impact player
 Sunrisers Hyderabad,starting_xi,Ishan Kishan,Batters,captain wicketkeeper
@@ -21,7 +21,7 @@ Sunrisers Hyderabad,starting_xi,Harsh Dubey,All Rounders,
 Sunrisers Hyderabad,starting_xi,Harshal Patel,All Rounders,
 Sunrisers Hyderabad,starting_xi,Jaydev Unadkat,Bowlers,
 Sunrisers Hyderabad,starting_xi,Eshan Malinga,Bowlers,
-Sunrisers Hyderabad,starting_xi,Travis Head,Batters,replaced player when impact sub is used
+Sunrisers Hyderabad,replaced_player,Travis Head,Batters,replaced player when impact sub is used
 Sunrisers Hyderabad,impact_player,David Payne,Bowlers,impact player
 Mumbai Indians,starting_xi,Hardik Pandya,All Rounders,captain
 Mumbai Indians,starting_xi,Rohit Sharma,Batters,
@@ -33,7 +33,7 @@ Mumbai Indians,starting_xi,Mayank Markande,Bowlers,
 Mumbai Indians,starting_xi,Shardul Thakur,All Rounders,
 Mumbai Indians,starting_xi,Allah Ghazanfar,Bowlers,
 Mumbai Indians,starting_xi,Trent Boult,Bowlers,
-Mumbai Indians,starting_xi,Jasprit Bumrah,Bowlers,replaced player when impact sub is used
+Mumbai Indians,replaced_player,Jasprit Bumrah,Bowlers,replaced player when impact sub is used
 Mumbai Indians,impact_player,Surya Kumar Yadav,Batters,impact player
 Kolkata Knight Riders,starting_xi,Ajinkya Rahane,Batters,captain
 Kolkata Knight Riders,starting_xi,Cameron Green,All Rounders,
@@ -44,7 +44,7 @@ Kolkata Knight Riders,starting_xi,Anukul Roy,All Rounders,
 Kolkata Knight Riders,starting_xi,Sunil Narine,All Rounders,
 Kolkata Knight Riders,starting_xi,Varun Chakaravarthy,Bowlers,
 Kolkata Knight Riders,starting_xi,Vaibhav Arora,Bowlers,
-Kolkata Knight Riders,starting_xi,Finn Allen,Batters,replaced player when impact sub is used
+Kolkata Knight Riders,replaced_player,Finn Allen,Batters,replaced player when impact sub is used
 Kolkata Knight Riders,starting_xi,Blessing Muzarabani,Bowlers,
 Kolkata Knight Riders,impact_player,Kartik Tyagi,Bowlers,impact player
 Rajasthan Royals,starting_xi,Riyan Parag,All Rounders,captain
@@ -67,7 +67,7 @@ Chennai Super Kings,starting_xi,Jamie Overton,All Rounders,
 Chennai Super Kings,starting_xi,Noor Ahmad,Bowlers,
 Chennai Super Kings,starting_xi,Matt Henry,Bowlers,
 Chennai Super Kings,starting_xi,Anshul Kamboj,Bowlers,
-Chennai Super Kings,starting_xi,Ayush Mhatre,Batters,replaced player when impact sub is used
+Chennai Super Kings,replaced_player,Ayush Mhatre,Batters,replaced player when impact sub is used
 Chennai Super Kings,starting_xi,Khaleel Ahmed,Bowlers,
 Chennai Super Kings,impact_player,Sarfaraz Khan,Batters,impact player
 Punjab Kings,starting_xi,Shreyas Iyer,Batters,captain
@@ -80,7 +80,7 @@ Punjab Kings,starting_xi,Marco Jansen,All Rounders,
 Punjab Kings,starting_xi,Xavier Bartlett,Bowlers,
 Punjab Kings,starting_xi,Vyshak Vijaykumar,Bowlers,
 Punjab Kings,starting_xi,Arshdeep Singh,Bowlers,
-Punjab Kings,starting_xi,Yuzvendra Chahal,Bowlers,replaced player when impact sub is used
+Punjab Kings,replaced_player,Yuzvendra Chahal,Bowlers,replaced player when impact sub is used
 Punjab Kings,impact_player,Priyansh Arya,All Rounders,impact player
 Gujarat Titans,starting_xi,Shubman Gill,Batters,captain
 Gujarat Titans,starting_xi,Sai Sudharsan,Batters,
@@ -91,7 +91,7 @@ Gujarat Titans,starting_xi,Rahul Tewatia,All Rounders,
 Gujarat Titans,starting_xi,Rashid Khan,Bowlers,
 Gujarat Titans,starting_xi,Kagiso Rabada,Bowlers,
 Gujarat Titans,starting_xi,Ashok Sharma,Bowlers,
-Gujarat Titans,starting_xi,Shahrukh Khan,All Rounders,replaced player when impact sub is used
+Gujarat Titans,replaced_player,Shahrukh Khan,All Rounders,replaced player when impact sub is used
 Gujarat Titans,starting_xi,Mohammed Siraj,Bowlers,
 Gujarat Titans,impact_player,Prasidh Krishna,Bowlers,impact player
 Lucknow Super Giants,starting_xi,Rishabh Pant,Batters,captain wicketkeeper
@@ -104,7 +104,7 @@ Lucknow Super Giants,starting_xi,Mohsin Khan,Bowlers,
 Lucknow Super Giants,starting_xi,Mohammad Shami,Bowlers,
 Lucknow Super Giants,starting_xi,Anrich Nortje,Bowlers,
 Lucknow Super Giants,starting_xi,Prince Yadav,Bowlers,
-Lucknow Super Giants,starting_xi,Mitchell Marsh,All Rounders,replaced player when impact sub is used
+Lucknow Super Giants,replaced_player,Mitchell Marsh,All Rounders,replaced player when impact sub is used
 Lucknow Super Giants,impact_player,Shahbaz Ahmad,All Rounders,impact player
 Delhi Capitals,starting_xi,Axar Patel,All Rounders,captain
 Delhi Capitals,starting_xi,KL Rahul,Batters,wicketkeeper
@@ -116,5 +116,5 @@ Delhi Capitals,starting_xi,Vipraj Nigam,All Rounders,
 Delhi Capitals,starting_xi,Lungi Ngidi,Bowlers,
 Delhi Capitals,starting_xi,Kuldeep Yadav,Bowlers,
 Delhi Capitals,starting_xi,Mukesh Kumar,Bowlers,
-Delhi Capitals,starting_xi,T Natarajan,Bowlers,replaced player when impact sub is used
+Delhi Capitals,replaced_player,T Natarajan,Bowlers,replaced player when impact sub is used
 Delhi Capitals,impact_player,Sameer Rizvi,All Rounders,impact player

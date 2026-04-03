@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import sys
-from collections import defaultdict
 from pathlib import Path
 
 import pandas as pd
@@ -19,7 +18,7 @@ from ipl_predictor.config import (
     TEAM_PRIORS_2026_PATH,
     TEAM_SQUADS_2026_PATH,
 )
-from ipl_predictor.data import normalize_team_columns
+from ipl_predictor.data import normalize_player_columns, normalize_player_name, normalize_team_columns
 from prepare_player_strength_features import (
     DEFAULT_BATTING_STRENGTH,
     DEFAULT_BOWLING_STRENGTH,
@@ -32,6 +31,15 @@ from prepare_player_strength_features import (
 ROLE_WEIGHTS = {"Batters": 1.0, "All Rounders": 0.85, "Bowlers": 0.3}
 BOWLING_ROLE_WEIGHTS = {"Batters": 0.1, "All Rounders": 0.8, "Bowlers": 1.0}
 LINEUP_STATUS_WEIGHTS = {"starting_xi": 1.0, "impact_player": 0.65, "replaced_player": 0.45}
+PLAYER_HISTORY_ALIASES = {
+    "Mohammad Shami": "Mohammed Shami",
+    "Nitish Kumar Reddy": "Nithish Kumar Reddy",
+    "Prasidh Krishna": "M Prasidh Krishna",
+    "Sai Sudharsan": "B Sai Sudharsan",
+    "Shahbaz Ahmad": "Shahbaz Ahmed",
+    "Varun Chakaravarthy": "CV Varun",
+    "Vyshak Vijaykumar": "Vijaykumar Vyshak",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -91,16 +99,78 @@ def build_player_stats(ball_by_ball: pd.DataFrame) -> tuple[dict[str, dict[str, 
     return batting_stats, bowling_stats
 
 
-def squad_metric(group: pd.DataFrame, batting_stats: dict[str, dict[str, float]], bowling_stats: dict[str, dict[str, float]]) -> tuple[float, float]:
+def player_candidate_score(stats: dict[str, float]) -> float:
+    return sum(float(value) for value in stats.values())
+
+
+def canonical_player_keys(player: str) -> list[str]:
+    normalized_player = str(normalize_player_name(player))
+    parts = normalized_player.split()
+    if not parts:
+        return []
+
+    surname = parts[-1].lower()
+    initials = "".join(part[0].lower() for part in parts[:-1] if part)
+    first_initial = parts[0][0].lower()
+    keys = [f"{surname}|{first_initial}"]
+    if initials:
+        keys.insert(0, f"{surname}|{initials}")
+    return keys
+
+
+def build_player_indices(stats_lookup: dict[str, dict[str, float]]) -> dict[str, list[str]]:
+    indices: dict[str, list[str]] = {}
+    for player in stats_lookup:
+        for key in canonical_player_keys(player):
+            indices.setdefault(key, []).append(player)
+    return indices
+
+
+def resolve_player_name(
+    player: str,
+    stats_lookup: dict[str, dict[str, float]],
+    player_indices: dict[str, list[str]],
+) -> str | None:
+    normalized_player = str(normalize_player_name(player))
+    if normalized_player in stats_lookup:
+        return normalized_player
+
+    alias = PLAYER_HISTORY_ALIASES.get(normalized_player)
+    if alias and alias in stats_lookup:
+        return alias
+
+    candidates: list[str] = []
+    for key in canonical_player_keys(normalized_player):
+        candidates.extend(player_indices.get(key, []))
+        if candidates:
+            break
+
+    if candidates:
+        unique_candidates = sorted(set(candidates))
+        if len(unique_candidates) == 1:
+            return unique_candidates[0]
+        return max(unique_candidates, key=lambda candidate: player_candidate_score(stats_lookup[candidate]))
+    return None
+
+
+def squad_metric(
+    group: pd.DataFrame,
+    batting_stats: dict[str, dict[str, float]],
+    bowling_stats: dict[str, dict[str, float]],
+    batting_indices: dict[str, list[str]],
+    bowling_indices: dict[str, list[str]],
+) -> tuple[float, float]:
     batting_scores = []
     bowling_scores = []
     for row in group.itertuples(index=False):
         batting_base = DEFAULT_BATTING_STRENGTH
         bowling_base = DEFAULT_BOWLING_STRENGTH
-        if row.player in batting_stats:
-            batting_base = batting_rating(batting_stats[row.player])
-        if row.player in bowling_stats:
-            bowling_base = bowling_rating(bowling_stats[row.player])
+        batting_name = resolve_player_name(row.player, batting_stats, batting_indices)
+        bowling_name = resolve_player_name(row.player, bowling_stats, bowling_indices)
+        if batting_name:
+            batting_base = batting_rating(batting_stats[batting_name])
+        if bowling_name:
+            bowling_base = bowling_rating(bowling_stats[bowling_name])
         lineup_weight = LINEUP_STATUS_WEIGHTS.get(getattr(row, "lineup_status", "starting_xi"), 1.0)
         batting_scores.append(batting_base * ROLE_WEIGHTS.get(row.role_group, 0.5) * lineup_weight)
         bowling_scores.append(bowling_base * BOWLING_ROLE_WEIGHTS.get(row.role_group, 0.5) * lineup_weight)
@@ -123,18 +193,22 @@ def main() -> None:
     overview = pd.read_csv(args.overview)
     squads = normalize_team_columns(squads, ["team"])
     overview = normalize_team_columns(overview, ["team"])
+    squads = normalize_player_columns(squads, ["player"])
     if args.lineups.exists():
         squads = pd.read_csv(args.lineups)
         squads = normalize_team_columns(squads, ["team"])
+        squads = normalize_player_columns(squads, ["player"])
     else:
         squads = squads.copy()
         squads["lineup_status"] = "starting_xi"
     ball_by_ball = load_ball_by_ball(args.source)
     batting_stats, bowling_stats = build_player_stats(ball_by_ball)
+    batting_indices = build_player_indices(batting_stats)
+    bowling_indices = build_player_indices(bowling_stats)
 
     rows = []
     for team, group in squads.groupby("team", sort=True):
-        batting_strength, bowling_strength = squad_metric(group, batting_stats, bowling_stats)
+        batting_strength, bowling_strength = squad_metric(group, batting_stats, bowling_stats, batting_indices, bowling_indices)
         prior_rating = scale_bonus((batting_strength + bowling_strength) / 2.0, center=25.0, spread=2.5)
         batting_bonus = scale_bonus(batting_strength, center=28.0, spread=2.0)
         bowling_bonus = scale_bonus(bowling_strength, center=21.0, spread=1.5)
