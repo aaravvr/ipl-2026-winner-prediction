@@ -28,6 +28,7 @@ IPL/
 |       |-- model.py
 |       `-- simulation.py
 |-- prepare_ball_by_ball_data.py
+|-- prepare_fixture_schedule.py
 |-- prepare_player_strength_features.py
 |-- train.py
 |-- simulate_2026.py
@@ -71,6 +72,11 @@ Required columns:
 
 This file should contain only league-stage fixtures. The playoffs are generated automatically from the simulated league table using the standard IPL top-4 format.
 
+Optional columns used for traceability:
+
+- `day`
+- `start_time_local`
+
 ### `data/raw/teams_2026.csv`
 
 Required columns:
@@ -95,6 +101,7 @@ These are generated from the ball-by-ball source and let the model incorporate p
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+python prepare_fixture_schedule.py --source C:\Users\aarav\Desktop\1774525332894_TATA_IPL_2026-Schedule.pdf
 python prepare_ball_by_ball_data.py --source C:\Users\aarav\Desktop\IPL.csv
 python prepare_player_strength_features.py --source C:\Users\aarav\Desktop\IPL.csv
 python train.py
@@ -119,5 +126,6 @@ python simulate_2026.py --n-simulations 5000
 
 - The sample data included here is only for structure and smoke testing. It is not enough for a meaningful forecast.
 - This repo can now ingest the detailed ball-by-ball source at `C:\Users\aarav\Desktop\IPL.csv` and aggregate it into match history automatically.
+- It can also extract the official 2026 league-stage fixture list from the schedule PDF.
 - It can also derive optional player-based team strength features from the same source before training.
 - The current setup is team-level. The next major upgrade would be player-level strength, expected XIs, injuries, auction outcomes, and venue-adjusted batting or bowling features.
