@@ -83,28 +83,12 @@ def build_training_frame(
         team_1_expected = _expected_score(team_1_elo, team_2_elo)
         team_2_expected = 1.0 - team_1_expected
 
-        toss_winner = getattr(match, "toss_winner", team_1)
-        toss_decision = getattr(match, "toss_decision", "field")
-        team_1_won_toss = int(toss_winner == team_1)
-        team_1_bats_first = int(
-            getattr(
-                match,
-                "team_1_batted_first",
-                (toss_winner == team_1 and toss_decision == "bat")
-                or (toss_winner == team_2 and toss_decision == "field"),
-            )
-        )
-
         rows.append(
             {
                 "season": match.season,
                 "team_1": team_1,
                 "team_2": team_2,
                 "venue": match.venue,
-                "toss_winner": toss_winner,
-                "toss_decision": toss_decision,
-                "team_1_won_toss": team_1_won_toss,
-                "team_1_bats_first": team_1_bats_first,
                 "team_1_recent_win_rate": _safe_rate(sum(team_1_recent), len(team_1_recent)),
                 "team_2_recent_win_rate": _safe_rate(sum(team_2_recent), len(team_2_recent)),
                 "recent_win_rate_diff": _safe_rate(sum(team_1_recent), len(team_1_recent)) - _safe_rate(sum(team_2_recent), len(team_2_recent)),
@@ -310,17 +294,6 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
     team_2_expected = 1.0 - team_1_expected
     team_1_player_strengths = state["player_team_strengths"][team_1]
     team_2_player_strengths = state["player_team_strengths"][team_2]
-    toss_winner = match_row.get("toss_winner", team_1)
-    toss_decision = match_row.get("toss_decision", "field")
-    team_1_won_toss = int(toss_winner == team_1)
-    team_1_bats_first = int(
-        match_row.get(
-            "team_1_batted_first",
-            (toss_winner == team_1 and toss_decision == "bat")
-            or (toss_winner == team_2 and toss_decision == "field"),
-        )
-    )
-
     return pd.DataFrame(
         [
             {
@@ -328,10 +301,6 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
                 "team_1": team_1,
                 "team_2": team_2,
                 "venue": match_row["venue"],
-                "toss_winner": toss_winner,
-                "toss_decision": toss_decision,
-                "team_1_won_toss": team_1_won_toss,
-                "team_1_bats_first": team_1_bats_first,
                 "team_1_recent_win_rate": _safe_rate(sum(team_1_recent), len(team_1_recent)),
                 "team_2_recent_win_rate": _safe_rate(sum(team_2_recent), len(team_2_recent)),
                 "recent_win_rate_diff": _safe_rate(sum(team_1_recent), len(team_1_recent)) - _safe_rate(sum(team_2_recent), len(team_2_recent)),
