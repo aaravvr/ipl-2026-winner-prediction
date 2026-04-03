@@ -18,6 +18,7 @@ VENUE_ALIASES = {
     "Bengaluru": "M Chinnaswamy Stadium",
     "M Chinnaswamy Stadium, Bengaluru": "M Chinnaswamy Stadium",
     "M.Chinnaswamy Stadium": "M Chinnaswamy Stadium",
+    "M. Chinnaswamy Stadium": "M Chinnaswamy Stadium",
     "Chennai": "MA Chidambaram Stadium",
     "M. A. Chidambaram Stadium": "MA Chidambaram Stadium",
     "MA Chidambaram Stadium, Chennai": "MA Chidambaram Stadium",
@@ -148,6 +149,7 @@ def load_historical_matches(path: Path) -> pd.DataFrame:
         raise ValueError(f"Historical matches file is missing columns: {sorted(missing)}")
 
     df = normalize_team_columns(df, ["team_1", "team_2", "toss_winner", "winner"])
+    df = normalize_venue_columns(df, ["venue"])
     df["date"] = pd.to_datetime(df["date"])
     # IPL seasons are contained within a single calendar year, and the raw season
     # field in this dataset is occasionally off by one. Match date is more reliable.

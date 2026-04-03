@@ -115,9 +115,75 @@ def build_historical_matches(df: pd.DataFrame) -> pd.DataFrame:
     matches["date"] = pd.to_datetime(matches["date"])
     # Match date is more reliable than the raw season field for this dataset.
     matches["season"] = matches["date"].dt.year.astype(int)
+    # Use a stable team ordering independent of batting order so training rows line
+    # up with future fixtures, where team_1/team_2 are just listing order.
+    matches[["team_1", "team_2"]] = pd.DataFrame(
+        matches.apply(
+            lambda row: sorted([row["team_1"], row["team_2"]]),
+            axis=1,
+            result_type="expand",
+        ),
+        index=matches.index,
+    )
+    first_innings_team = first_innings.set_index("match_id")["team_1"]
+    first_innings_score = first_innings.set_index("match_id")["team_1_score"]
+    first_innings_wickets = first_innings.set_index("match_id")["team_1_wickets_lost"]
+    second_innings_team = second_innings.set_index("match_id")["team_2"]
+    second_innings_score = second_innings.set_index("match_id")["team_2_score"]
+    second_innings_wickets = second_innings.set_index("match_id")["team_2_wickets_lost"]
+
+    matches["team_1_batted_first"] = (
+        matches["team_1"] == matches["match_id"].map(first_innings_team)
+    ).astype(int)
+    matches["team_1_score"] = matches.apply(
+        lambda row: (
+            first_innings_score.loc[row["match_id"]]
+            if row["team_1"] == first_innings_team.loc[row["match_id"]]
+            else second_innings_score.loc[row["match_id"]]
+        ),
+        axis=1,
+    )
+    matches["team_2_score"] = matches.apply(
+        lambda row: (
+            second_innings_score.loc[row["match_id"]]
+            if row["team_2"] == second_innings_team.loc[row["match_id"]]
+            else first_innings_score.loc[row["match_id"]]
+        ),
+        axis=1,
+    )
+    matches["team_1_wickets_lost"] = matches.apply(
+        lambda row: (
+            first_innings_wickets.loc[row["match_id"]]
+            if row["team_1"] == first_innings_team.loc[row["match_id"]]
+            else second_innings_wickets.loc[row["match_id"]]
+        ),
+        axis=1,
+    )
+    matches["team_2_wickets_lost"] = matches.apply(
+        lambda row: (
+            second_innings_wickets.loc[row["match_id"]]
+            if row["team_2"] == second_innings_team.loc[row["match_id"]]
+            else first_innings_wickets.loc[row["match_id"]]
+        ),
+        axis=1,
+    )
     matches["team_1_won"] = (matches["winner"] == matches["team_1"]).astype(int)
     matches["margin_runs"] = (matches["team_1_score"] - matches["team_2_score"]).where(matches["winner"] == matches["team_1"], 0)
-    matches["margin_wickets"] = (10 - matches["team_2_wickets_lost"]).where(matches["winner"] == matches["team_2"], 0)
+    matches["margin_wickets"] = (
+        10
+        - matches.apply(
+            lambda row: row["team_1_wickets_lost"] if row["winner"] == row["team_1"] else row["team_2_wickets_lost"],
+            axis=1,
+        )
+    ).where(
+        (
+            (matches["winner"] == matches["team_1"]) & (matches["team_1_batted_first"] == 0)
+        )
+        | (
+            (matches["winner"] == matches["team_2"]) & (matches["team_1_batted_first"] == 1)
+        ),
+        0,
+    )
     matches = matches.sort_values(["date", "season", "match_id"]).reset_index(drop=True)
     return matches
 

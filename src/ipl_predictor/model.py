@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import joblib
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
 from sklearn.pipeline import Pipeline
@@ -10,11 +10,9 @@ from sklearn.preprocessing import OneHotEncoder
 
 
 def build_model_pipeline() -> Pipeline:
-    categorical_features = ["team_1", "team_2", "venue", "toss_winner", "toss_decision"]
+    categorical_features = ["team_1", "team_2", "venue"]
     numeric_features = [
         "season",
-        "team_1_won_toss",
-        "team_1_bats_first",
         "team_1_recent_win_rate",
         "team_2_recent_win_rate",
         "recent_win_rate_diff",
@@ -70,10 +68,9 @@ def build_model_pipeline() -> Pipeline:
         ]
     )
 
-    model = GradientBoostingClassifier(
+    model = AdaBoostClassifier(
+        n_estimators=300,
         learning_rate=0.05,
-        n_estimators=200,
-        max_depth=3,
         random_state=42,
     )
 

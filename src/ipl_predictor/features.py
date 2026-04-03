@@ -82,8 +82,12 @@ def build_training_frame(
         toss_decision = getattr(match, "toss_decision", "field")
         team_1_won_toss = int(toss_winner == team_1)
         team_1_bats_first = int(
-            (toss_winner == team_1 and toss_decision == "bat")
-            or (toss_winner == team_2 and toss_decision == "field")
+            getattr(
+                match,
+                "team_1_batted_first",
+                (toss_winner == team_1 and toss_decision == "bat")
+                or (toss_winner == team_2 and toss_decision == "field"),
+            )
         )
 
         rows.append(
@@ -303,8 +307,11 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
     toss_decision = match_row.get("toss_decision", "field")
     team_1_won_toss = int(toss_winner == team_1)
     team_1_bats_first = int(
-        (toss_winner == team_1 and toss_decision == "bat")
-        or (toss_winner == team_2 and toss_decision == "field")
+        match_row.get(
+            "team_1_batted_first",
+            (toss_winner == team_1 and toss_decision == "bat")
+            or (toss_winner == team_2 and toss_decision == "field"),
+        )
     )
 
     return pd.DataFrame(

@@ -17,6 +17,63 @@ from ipl_predictor.features import build_training_frame
 from ipl_predictor.model import build_model_pipeline, evaluate_model, save_model
 
 
+def augment_training_data(x_train: pd.DataFrame, y_train: pd.Series) -> tuple[pd.DataFrame, pd.Series]:
+    train_frame = x_train.copy()
+    train_frame["target"] = y_train.to_numpy()
+    swapped = train_frame.copy()
+
+    swap_pairs = [
+        ("team_1", "team_2"),
+        ("team_1_recent_win_rate", "team_2_recent_win_rate"),
+        ("team_1_overall_win_rate", "team_2_overall_win_rate"),
+        ("team_1_venue_win_rate", "team_2_venue_win_rate"),
+        ("team_1_avg_runs_scored", "team_2_avg_runs_scored"),
+        ("team_1_avg_runs_conceded", "team_2_avg_runs_conceded"),
+        ("team_1_recent_margin", "team_2_recent_margin"),
+        ("team_1_h2h_win_rate", "team_2_h2h_win_rate"),
+        ("team_1_elo", "team_2_elo"),
+        ("team_1_expected_score", "team_2_expected_score"),
+        ("team_1_player_batting_strength", "team_2_player_batting_strength"),
+        ("team_1_player_bowling_strength", "team_2_player_bowling_strength"),
+    ]
+    for left, right in swap_pairs:
+        if left in train_frame.columns and right in train_frame.columns:
+            swapped[left] = train_frame[right].to_numpy()
+            swapped[right] = train_frame[left].to_numpy()
+
+    invert_columns = [
+        "recent_win_rate_diff",
+        "overall_win_rate_diff",
+        "venue_win_rate_diff",
+        "avg_runs_scored_diff",
+        "avg_runs_conceded_diff",
+        "recent_margin_diff",
+        "h2h_win_rate_diff",
+        "elo_diff",
+        "player_batting_strength_diff",
+        "player_bowling_strength_diff",
+    ]
+    for column in invert_columns:
+        if column in train_frame.columns:
+            swapped[column] = -train_frame[column].to_numpy()
+
+    if "team_1_won_toss" in train_frame.columns:
+        swapped["team_1_won_toss"] = 1 - train_frame["team_1_won_toss"].to_numpy()
+    if "team_1_bats_first" in train_frame.columns:
+        swapped["team_1_bats_first"] = 1 - train_frame["team_1_bats_first"].to_numpy()
+    if "toss_winner" in train_frame.columns:
+        swapped["toss_winner"] = train_frame.apply(
+            lambda row: row["team_2"]
+            if row["toss_winner"] == row["team_1"]
+            else (row["team_1"] if row["toss_winner"] == row["team_2"] else row["toss_winner"]),
+            axis=1,
+        )
+
+    swapped["target"] = 1 - train_frame["target"].to_numpy()
+    augmented = pd.concat([train_frame, swapped], ignore_index=True)
+    return augmented.drop(columns=["target"]), augmented["target"]
+
+
 def time_based_split(training_frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     ordered = training_frame.reset_index(drop=True)
     if ordered["season"].nunique() > 1:
@@ -51,6 +108,7 @@ def main() -> None:
         print("Warning: sample data is very small. Replace it with full IPL history for meaningful predictions.")
 
     x_train, x_test, y_train, y_test = time_based_split(training_frame)
+    x_train, y_train = augment_training_data(x_train, y_train)
 
     model = build_model_pipeline()
     model.fit(x_train, y_train)

@@ -38,7 +38,7 @@ def _sort_table(table: pd.DataFrame, rng: np.random.Generator) -> pd.DataFrame:
 
 def _simulate_match(model, match_row: pd.Series, state: dict, rng: np.random.Generator) -> tuple[str, float]:
     features = make_match_features(match_row, state)
-    win_probability = model.predict_proba(features)[:, 1][0]
+    win_probability = float(model.predict_proba(features)[:, 1][0])
     winner = match_row["team_1"] if rng.random() < win_probability else match_row["team_2"]
     state["current_venue"] = match_row["venue"]
     state["current_team_1_score"] = float(match_row.get("team_1_score", np.nan)) if pd.notna(match_row.get("team_1_score", np.nan)) else None
@@ -56,8 +56,6 @@ def _playoff_match(model, team_1: str, team_2: str, state: dict, rng: np.random.
             "team_1": team_1,
             "team_2": team_2,
             "venue": venue,
-            "toss_winner": team_1,
-            "toss_decision": "field",
         }
     )
     winner, _ = _simulate_match(model, row, state, rng)
