@@ -24,6 +24,8 @@ from ipl_predictor.data import normalize_team_columns
 NON_BOWLER_WICKETS = {"run out", "retired hurt", "retired out", "obstructing the field"}
 DEFAULT_BATTING_STRENGTH = 35.0
 DEFAULT_BOWLING_STRENGTH = 18.0
+RECENT_FORM_WINDOW = 8
+RECENT_FORM_WEIGHT = 0.6
 
 
 def parse_args() -> argparse.Namespace:
@@ -89,14 +91,39 @@ def bowling_rating(stats: dict[str, float]) -> float:
     return 14.0 * wickets_per_match + max(0.0, 10.0 - economy)
 
 
-def team_strength(players: list[str], player_stats: dict[str, dict[str, float]], rating_fn, default_strength: float, top_n: int) -> float:
+def batting_match_rating(runs: float, balls: float) -> float:
+    balls = max(float(balls), 1.0)
+    return 0.55 * float(runs) + 0.15 * (100.0 * float(runs) / balls)
+
+
+def bowling_match_rating(runs: float, balls: float, wickets: float) -> float:
+    balls = max(float(balls), 1.0)
+    economy = 6.0 * float(runs) / balls
+    return 14.0 * float(wickets) + max(0.0, 10.0 - economy)
+
+
+def team_strength(
+    players: list[str],
+    player_stats: dict[str, dict[str, float]],
+    recent_form: dict[str, list[float]],
+    rating_fn,
+    default_strength: float,
+    top_n: int,
+    recent_weight: float = RECENT_FORM_WEIGHT,
+) -> float:
     ratings = []
     for player in players:
         stats = player_stats.get(player)
         if not stats:
             ratings.append(default_strength)
             continue
-        ratings.append(rating_fn(stats))
+        career_rating = rating_fn(stats)
+        recent_values = recent_form.get(player, [])
+        if recent_values:
+            recent_rating = sum(recent_values) / len(recent_values)
+            ratings.append((1.0 - recent_weight) * career_rating + recent_weight * recent_rating)
+        else:
+            ratings.append(career_rating)
     if not ratings:
         return default_strength
     ratings.sort(reverse=True)
@@ -148,6 +175,8 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
 
     batting_player_stats: dict[str, dict[str, float]] = defaultdict(lambda: {"runs": 0.0, "balls": 0.0, "innings": 0.0})
     bowling_player_stats: dict[str, dict[str, float]] = defaultdict(lambda: {"runs": 0.0, "balls": 0.0, "wickets": 0.0, "matches": 0.0})
+    batting_recent_form: dict[str, list[float]] = defaultdict(lambda: [])
+    bowling_recent_form: dict[str, list[float]] = defaultdict(lambda: [])
     latest_team_strengths: dict[str, dict[str, float]] = {}
     rows: list[dict[str, float | int]] = []
 
@@ -157,10 +186,38 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
         team_1_bowlers = bowlers_by_match_team.get((match.match_id, match.team_1), [])
         team_2_bowlers = bowlers_by_match_team.get((match.match_id, match.team_2), [])
 
-        team_1_batting_strength = team_strength(team_1_batters, batting_player_stats, batting_rating, DEFAULT_BATTING_STRENGTH, top_n=6)
-        team_2_batting_strength = team_strength(team_2_batters, batting_player_stats, batting_rating, DEFAULT_BATTING_STRENGTH, top_n=6)
-        team_1_bowling_strength = team_strength(team_1_bowlers, bowling_player_stats, bowling_rating, DEFAULT_BOWLING_STRENGTH, top_n=5)
-        team_2_bowling_strength = team_strength(team_2_bowlers, bowling_player_stats, bowling_rating, DEFAULT_BOWLING_STRENGTH, top_n=5)
+        team_1_batting_strength = team_strength(
+            team_1_batters,
+            batting_player_stats,
+            batting_recent_form,
+            batting_rating,
+            DEFAULT_BATTING_STRENGTH,
+            top_n=6,
+        )
+        team_2_batting_strength = team_strength(
+            team_2_batters,
+            batting_player_stats,
+            batting_recent_form,
+            batting_rating,
+            DEFAULT_BATTING_STRENGTH,
+            top_n=6,
+        )
+        team_1_bowling_strength = team_strength(
+            team_1_bowlers,
+            bowling_player_stats,
+            bowling_recent_form,
+            bowling_rating,
+            DEFAULT_BOWLING_STRENGTH,
+            top_n=5,
+        )
+        team_2_bowling_strength = team_strength(
+            team_2_bowlers,
+            bowling_player_stats,
+            bowling_recent_form,
+            bowling_rating,
+            DEFAULT_BOWLING_STRENGTH,
+            top_n=5,
+        )
 
         rows.append(
             {
@@ -185,12 +242,20 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
 
         for update in batting_updates_by_match.get(match.match_id, pd.DataFrame()).itertuples(index=False):
             player = str(update.batter)
+            recent = batting_recent_form[player]
+            recent.append(batting_match_rating(update.runs, update.balls))
+            if len(recent) > RECENT_FORM_WINDOW:
+                del recent[0]
             batting_player_stats[player]["runs"] += float(update.runs)
             batting_player_stats[player]["balls"] += float(update.balls)
             batting_player_stats[player]["innings"] += 1.0
 
         for update in bowling_updates_by_match.get(match.match_id, pd.DataFrame()).itertuples(index=False):
             player = str(update.bowler)
+            recent = bowling_recent_form[player]
+            recent.append(bowling_match_rating(update.runs, update.balls, update.wickets))
+            if len(recent) > RECENT_FORM_WINDOW:
+                del recent[0]
             bowling_player_stats[player]["runs"] += float(update.runs)
             bowling_player_stats[player]["balls"] += float(update.balls)
             bowling_player_stats[player]["wickets"] += float(update.wickets)
