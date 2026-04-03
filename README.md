@@ -90,6 +90,12 @@ Required columns:
 
 These are generated from the ball-by-ball source and let the model incorporate pre-match player-derived batting and bowling strength at the team level.
 
+### Optional 2026 priors file
+
+- `data/raw/team_priors_2026.csv`
+
+This file lets you encode current-season expectations such as overall squad strength, batting upside, and bowling depth for 2026.
+
 ## Quick start
 
 1. Create a virtual environment and install dependencies.
@@ -128,4 +134,5 @@ python simulate_2026.py --n-simulations 5000
 - This repo can now ingest the detailed ball-by-ball source at `C:\Users\aarav\Desktop\IPL.csv` and aggregate it into match history automatically.
 - It can also extract the official 2026 league-stage fixture list from the schedule PDF.
 - It can also derive optional player-based team strength features from the same source before training.
+- It can also apply editable 2026 team priors during simulation to reflect current-season expectations.
 - The current setup is team-level. The next major upgrade would be player-level strength, expected XIs, injuries, auction outcomes, and venue-adjusted batting or bowling features.

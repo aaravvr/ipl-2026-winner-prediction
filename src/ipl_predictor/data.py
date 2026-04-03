@@ -128,3 +128,23 @@ def load_optional_team_player_strengths(path: Path) -> dict[str, dict[str, float
         }
         for row in df.itertuples(index=False)
     }
+
+
+def load_optional_team_priors(path: Path) -> dict[str, dict[str, float]]:
+    df = load_optional_csv(path)
+    if df is None:
+        return {}
+    required_columns = {"team", "prior_rating", "batting_bonus", "bowling_bonus"}
+    missing = required_columns.difference(df.columns)
+    if missing:
+        raise ValueError(f"Team priors file is missing columns: {sorted(missing)}")
+    df = normalize_team_columns(df, ["team"])
+    df = df.dropna(subset=["team"])
+    return {
+        str(row.team): {
+            "prior_rating": float(row.prior_rating),
+            "batting_bonus": float(row.batting_bonus),
+            "bowling_bonus": float(row.bowling_bonus),
+        }
+        for row in df.itertuples(index=False)
+    }

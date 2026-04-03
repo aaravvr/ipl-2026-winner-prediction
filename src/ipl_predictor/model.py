@@ -36,6 +36,15 @@ def build_model_pipeline() -> Pipeline:
         "team_2_player_bowling_strength",
         "player_batting_strength_diff",
         "player_bowling_strength_diff",
+        "team_1_prior_rating",
+        "team_2_prior_rating",
+        "prior_rating_diff",
+        "team_1_batting_bonus",
+        "team_2_batting_bonus",
+        "batting_bonus_diff",
+        "team_1_bowling_bonus",
+        "team_2_bowling_bonus",
+        "bowling_bonus_diff",
     ]
 
     preprocessor = ColumnTransformer(
