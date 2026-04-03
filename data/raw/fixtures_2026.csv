@@ -1,0 +1,16 @@
+match_id,date,team_1,team_2,venue
+1,2026-03-21,Kolkata Knight Riders,Royal Challengers Bengaluru,Kolkata
+2,2026-03-22,Chennai Super Kings,Mumbai Indians,Chennai
+3,2026-03-22,Sunrisers Hyderabad,Rajasthan Royals,Hyderabad
+4,2026-03-23,Delhi Capitals,Lucknow Super Giants,Delhi
+5,2026-03-23,Gujarat Titans,Punjab Kings,Ahmedabad
+6,2026-03-24,Mumbai Indians,Royal Challengers Bengaluru,Mumbai
+7,2026-03-24,Kolkata Knight Riders,Sunrisers Hyderabad,Kolkata
+8,2026-03-25,Rajasthan Royals,Chennai Super Kings,Jaipur
+9,2026-03-25,Lucknow Super Giants,Gujarat Titans,Lucknow
+10,2026-03-26,Punjab Kings,Delhi Capitals,Mohali
+11,2026-03-27,Chennai Super Kings,Sunrisers Hyderabad,Chennai
+12,2026-03-27,Royal Challengers Bengaluru,Rajasthan Royals,Bengaluru
+13,2026-03-28,Mumbai Indians,Gujarat Titans,Mumbai
+14,2026-03-28,Delhi Capitals,Kolkata Knight Riders,Delhi
+15,2026-03-29,Punjab Kings,Lucknow Super Giants,Mohali

@@ -1,0 +1,82 @@
+from __future__ import annotations
+
+import joblib
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+
+
+def build_model_pipeline() -> Pipeline:
+    categorical_features = ["team_1", "team_2", "venue", "toss_winner", "toss_decision"]
+    numeric_features = [
+        "season",
+        "team_1_recent_win_rate",
+        "team_2_recent_win_rate",
+        "team_1_overall_win_rate",
+        "team_2_overall_win_rate",
+        "team_1_venue_win_rate",
+        "team_2_venue_win_rate",
+        "team_1_avg_runs_scored",
+        "team_2_avg_runs_scored",
+        "team_1_avg_runs_conceded",
+        "team_2_avg_runs_conceded",
+        "team_1_h2h_win_rate",
+        "team_2_h2h_win_rate",
+        "team_1_elo",
+        "team_2_elo",
+        "elo_diff",
+        "team_1_expected_score",
+        "team_2_expected_score",
+    ]
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            (
+                "categorical",
+                Pipeline(
+                    steps=[
+                        ("imputer", SimpleImputer(strategy="most_frequent")),
+                        ("encoder", OneHotEncoder(handle_unknown="ignore")),
+                    ]
+                ),
+                categorical_features,
+            ),
+            (
+                "numeric",
+                Pipeline(steps=[("imputer", SimpleImputer(strategy="median"))]),
+                numeric_features,
+            ),
+        ]
+    )
+
+    model = GradientBoostingClassifier(
+        learning_rate=0.05,
+        n_estimators=200,
+        max_depth=3,
+        random_state=42,
+    )
+
+    return Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
+
+
+def evaluate_model(model: Pipeline, x_test, y_test) -> dict[str, float]:
+    probabilities = model.predict_proba(x_test)[:, 1]
+    predictions = (probabilities >= 0.5).astype(int)
+    return {
+        "accuracy": accuracy_score(y_test, predictions),
+        "roc_auc": roc_auc_score(y_test, probabilities) if len(set(y_test)) > 1 else float("nan"),
+        "log_loss": log_loss(y_test, probabilities, labels=[0, 1]),
+    }
+
+
+def save_model(model: Pipeline, path, feature_metadata_path, feature_columns: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    joblib.dump(model, path)
+    joblib.dump(feature_columns, feature_metadata_path)
+
+
+def load_model(path):
+    return joblib.load(path)
