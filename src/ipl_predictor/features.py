@@ -29,6 +29,11 @@ def _expected_score(rating_a: float, rating_b: float) -> float:
     return 1.0 / (1.0 + 10 ** ((rating_b - rating_a) / 400.0))
 
 
+def _is_reliable_scorecard(match) -> bool:
+    method = str(getattr(match, "method", "") or "").strip().upper()
+    return method != "D/L"
+
+
 def build_training_frame(
     matches: pd.DataFrame,
     recent_window: int = 5,
@@ -141,6 +146,7 @@ def build_training_frame(
         team_2_won = int(winner == team_2)
         team_1_score = float(getattr(match, "team_1_score", np.nan))
         team_2_score = float(getattr(match, "team_2_score", np.nan))
+        score_reliable = _is_reliable_scorecard(match)
         team_totals[team_1][0] += team_1_won
         team_totals[team_1][1] += 1
         team_totals[team_2][0] += team_2_won
@@ -149,21 +155,21 @@ def build_training_frame(
         venue_totals[(team_1, match.venue)][1] += 1
         venue_totals[(team_2, match.venue)][0] += team_2_won
         venue_totals[(team_2, match.venue)][1] += 1
-        if not np.isnan(team_1_score):
+        if score_reliable and not np.isnan(team_1_score):
             batting_totals[team_1][0] += team_1_score
             batting_totals[team_1][1] += 1
             bowling_totals[team_2][0] += team_1_score
             bowling_totals[team_2][1] += 1
             venue_scoring[match.venue][0] += team_1_score
             venue_scoring[match.venue][1] += 1
-        if not np.isnan(team_2_score):
+        if score_reliable and not np.isnan(team_2_score):
             batting_totals[team_2][0] += team_2_score
             batting_totals[team_2][1] += 1
             bowling_totals[team_1][0] += team_2_score
             bowling_totals[team_1][1] += 1
             venue_scoring[match.venue][0] += team_2_score
             venue_scoring[match.venue][1] += 1
-        if not np.isnan(team_1_score) and not np.isnan(team_2_score):
+        if score_reliable and not np.isnan(team_1_score) and not np.isnan(team_2_score):
             margin = team_1_score - team_2_score
             team_margins[team_1].append(margin)
             team_margins[team_2].append(-margin)
@@ -211,6 +217,7 @@ def initialize_state(
         team_2_won = int(winner == team_2)
         team_1_score = float(getattr(match, "team_1_score", np.nan))
         team_2_score = float(getattr(match, "team_2_score", np.nan))
+        score_reliable = _is_reliable_scorecard(match)
 
         team_totals[team_1][0] += team_1_won
         team_totals[team_1][1] += 1
@@ -220,21 +227,21 @@ def initialize_state(
         venue_totals[(team_1, match.venue)][1] += 1
         venue_totals[(team_2, match.venue)][0] += team_2_won
         venue_totals[(team_2, match.venue)][1] += 1
-        if not np.isnan(team_1_score):
+        if score_reliable and not np.isnan(team_1_score):
             batting_totals[team_1][0] += team_1_score
             batting_totals[team_1][1] += 1
             bowling_totals[team_2][0] += team_1_score
             bowling_totals[team_2][1] += 1
             venue_scoring[match.venue][0] += team_1_score
             venue_scoring[match.venue][1] += 1
-        if not np.isnan(team_2_score):
+        if score_reliable and not np.isnan(team_2_score):
             batting_totals[team_2][0] += team_2_score
             batting_totals[team_2][1] += 1
             bowling_totals[team_1][0] += team_2_score
             bowling_totals[team_1][1] += 1
             venue_scoring[match.venue][0] += team_2_score
             venue_scoring[match.venue][1] += 1
-        if not np.isnan(team_1_score) and not np.isnan(team_2_score):
+        if score_reliable and not np.isnan(team_1_score) and not np.isnan(team_2_score):
             margin = team_1_score - team_2_score
             team_margins[team_1].append(margin)
             team_margins[team_2].append(-margin)

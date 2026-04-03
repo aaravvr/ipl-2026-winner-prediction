@@ -1,11 +1,11 @@
-team,prior_rating,batting_bonus,bowling_bonus,captain,coach,venue,derived_batting_strength,derived_bowling_strength,notes
-Chennai Super Kings,-1.0,1.0,-2.0,Ruturaj Gaikwad,Stephen Fleming,M. A. Chidambaram Stadium,19.87,2.124,Auto-generated from official squads and historical IPL player performance
-Delhi Capitals,0.0,3.0,-2.0,Axar Patel,Hemang Badani,Arun Jaitley Stadium,23.331,3.437,Auto-generated from official squads and historical IPL player performance
-Gujarat Titans,-1.0,0.0,-2.0,Shubman Gill,Ashish Nehra,Narendra Modi Stadium,18.449,2.523,Auto-generated from official squads and historical IPL player performance
-Kolkata Knight Riders,0.0,1.0,-2.0,Ajinkya Rahane,Abhishek Nayar,Eden Gardens,20.302,4.964,Auto-generated from official squads and historical IPL player performance
-Lucknow Super Giants,-1.0,1.0,-2.0,Rishabh Pant,Justin Langer,BRSABV Ekana Cricket Stadium,19.261,2.023,Auto-generated from official squads and historical IPL player performance
-Mumbai Indians,0.0,2.0,-2.0,Hardik Pandya,Mahela Jayawardene,Wankhede Stadium,21.44,4.442,Auto-generated from official squads and historical IPL player performance
-Punjab Kings,0.0,2.0,-2.0,Shreyas Iyer,Ricky Ponting,New International Cricket Stadium,22.295,4.773,Auto-generated from official squads and historical IPL player performance
-Rajasthan Royals,0.0,2.0,-2.0,Riyan Parag,Kumar Sangakkara,Sawai Mansingh Stadium,21.475,2.491,Auto-generated from official squads and historical IPL player performance
-Royal Challengers Bengaluru,1.0,3.0,-2.0,Rajat Patidar,Andy Flower,M. Chinnaswamy Stadium,23.719,5.248,Auto-generated from official squads and historical IPL player performance
-Sunrisers Hyderabad,1.0,4.0,-2.0,Pat Cummins,Daniel Vettori,Rajiv Gandhi Intl. Cricket Stadium,25.408,3.51,Auto-generated from official squads and historical IPL player performance
+team,captain,coach,venue,derived_batting_strength,derived_bowling_strength,notes,prior_rating,batting_bonus,bowling_bonus
+Chennai Super Kings,Ruturaj Gaikwad,Stephen Fleming,M. A. Chidambaram Stadium,19.87,2.124,Auto-generated from official squads and historical IPL player performance,-0.0,-0.0,-1.0
+Delhi Capitals,Axar Patel,Hemang Badani,Arun Jaitley Stadium,23.331,3.437,Auto-generated from official squads and historical IPL player performance,2.0,3.0,1.0
+Gujarat Titans,Shubman Gill,Ashish Nehra,Narendra Modi Stadium,18.449,2.523,Auto-generated from official squads and historical IPL player performance,-2.0,-1.0,0.0
+Kolkata Knight Riders,Ajinkya Rahane,Abhishek Nayar,Eden Gardens,20.302,4.964,Auto-generated from official squads and historical IPL player performance,0.0,0.0,3.0
+Lucknow Super Giants,Rishabh Pant,Justin Langer,BRSABV Ekana Cricket Stadium,19.261,2.023,Auto-generated from official squads and historical IPL player performance,-1.0,-1.0,-1.0
+Mumbai Indians,Hardik Pandya,Mahela Jayawardene,Wankhede Stadium,21.44,4.442,Auto-generated from official squads and historical IPL player performance,1.0,1.0,2.0
+Punjab Kings,Shreyas Iyer,Ricky Ponting,New International Cricket Stadium,22.295,4.773,Auto-generated from official squads and historical IPL player performance,2.0,2.0,3.0
+Rajasthan Royals,Riyan Parag,Kumar Sangakkara,Sawai Mansingh Stadium,21.475,2.491,Auto-generated from official squads and historical IPL player performance,0.0,2.0,-0.0
+Royal Challengers Bengaluru,Rajat Patidar,Andy Flower,M. Chinnaswamy Stadium,23.719,5.248,Auto-generated from official squads and historical IPL player performance,3.0,3.0,4.0
+Sunrisers Hyderabad,Pat Cummins,Daniel Vettori,Rajiv Gandhi Intl. Cricket Stadium,25.408,3.51,Auto-generated from official squads and historical IPL player performance,2.0,4.0,2.0

@@ -182,9 +182,16 @@ def squad_metric(
     return batting_strength, bowling_strength
 
 
-def scale_bonus(value: float, center: float, spread: float) -> float:
-    scaled = round((value - center) / spread)
-    return float(max(-2, min(10, scaled + 5)))
+def scale_from_rank(values: list[float], low: int, high: int) -> list[float]:
+    series = pd.Series(values, dtype=float)
+    if series.empty:
+        return []
+    if series.nunique(dropna=False) <= 1:
+        midpoint = round((low + high) / 2)
+        return [float(midpoint)] * len(series)
+    ranks = series.rank(method="average", pct=True)
+    scaled = (low + (high - low) * ranks).round().clip(lower=low, upper=high)
+    return scaled.astype(float).tolist()
 
 
 def main() -> None:
@@ -209,26 +216,29 @@ def main() -> None:
     rows = []
     for team, group in squads.groupby("team", sort=True):
         batting_strength, bowling_strength = squad_metric(group, batting_stats, bowling_stats, batting_indices, bowling_indices)
-        prior_rating = scale_bonus((batting_strength + bowling_strength) / 2.0, center=25.0, spread=2.5)
-        batting_bonus = scale_bonus(batting_strength, center=28.0, spread=2.0)
-        bowling_bonus = scale_bonus(bowling_strength, center=21.0, spread=1.5)
         team_meta = overview[overview["team"] == team].iloc[0]
         rows.append(
             {
                 "team": team,
-                "prior_rating": prior_rating,
-                "batting_bonus": batting_bonus,
-                "bowling_bonus": bowling_bonus,
                 "captain": team_meta["captain"],
                 "coach": team_meta["coach"],
                 "venue": team_meta["venue"],
-                "derived_batting_strength": round(batting_strength, 3),
-                "derived_bowling_strength": round(bowling_strength, 3),
+                "derived_batting_strength": batting_strength,
+                "derived_bowling_strength": bowling_strength,
                 "notes": "Auto-generated from official squads and historical IPL player performance",
             }
         )
 
     priors = pd.DataFrame(rows).sort_values("team").reset_index(drop=True)
+    priors["prior_rating"] = scale_from_rank(
+        ((priors["derived_batting_strength"] + priors["derived_bowling_strength"]) / 2.0).tolist(),
+        low=-2,
+        high=3,
+    )
+    priors["batting_bonus"] = scale_from_rank(priors["derived_batting_strength"].tolist(), low=-2, high=4)
+    priors["bowling_bonus"] = scale_from_rank(priors["derived_bowling_strength"].tolist(), low=-2, high=4)
+    priors["derived_batting_strength"] = priors["derived_batting_strength"].round(3)
+    priors["derived_bowling_strength"] = priors["derived_bowling_strength"].round(3)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     priors.to_csv(args.output, index=False)
     print(f"Saved team priors to: {args.output}")

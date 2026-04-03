@@ -17,8 +17,9 @@ from ipl_predictor.config import (
     HISTORICAL_MATCHES_PATH,
     MATCH_PLAYER_STRENGTHS_PATH,
     TEAM_PLAYER_STRENGTHS_PATH,
+    TEAMS_2026_PATH,
 )
-from ipl_predictor.data import normalize_team_columns
+from ipl_predictor.data import load_teams, normalize_team_columns
 
 
 NON_BOWLER_WICKETS = {"run out", "retired hurt", "retired out", "obstructing the field"}
@@ -48,6 +49,12 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=TEAM_PLAYER_STRENGTHS_PATH,
         help="Output path for latest team player strength values",
+    )
+    parser.add_argument(
+        "--teams",
+        type=Path,
+        default=TEAMS_2026_PATH,
+        help="Optional current teams CSV used to filter latest team strengths",
     )
     return parser.parse_args()
 
@@ -280,6 +287,9 @@ def main() -> None:
     historical_matches = historical_matches.dropna(subset=["match_id", "team_1", "team_2"])
     ball_by_ball = load_ball_by_ball(args.source)
     match_strengths, latest_strengths = build_match_player_strengths(ball_by_ball, historical_matches)
+    current_teams = set(load_teams(args.teams)) if args.teams.exists() else set()
+    if current_teams:
+        latest_strengths = latest_strengths[latest_strengths["team"].isin(current_teams)].reset_index(drop=True)
 
     args.match_output.parent.mkdir(parents=True, exist_ok=True)
     args.team_output.parent.mkdir(parents=True, exist_ok=True)

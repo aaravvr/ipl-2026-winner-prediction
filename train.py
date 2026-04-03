@@ -108,7 +108,9 @@ def main() -> None:
         print("Warning: sample data is very small. Replace it with full IPL history for meaningful predictions.")
 
     x_train, x_test, y_train, y_test = time_based_split(training_frame)
+    raw_train_rows = len(x_train)
     x_train, y_train = augment_training_data(x_train, y_train)
+    augmented_train_rows = len(x_train)
 
     model = build_model_pipeline()
     model.fit(x_train, y_train)
@@ -117,7 +119,8 @@ def main() -> None:
     metrics_frame = pd.DataFrame(
         [
             {
-                "train_rows": len(x_train),
+                "train_rows": raw_train_rows,
+                "augmented_train_rows": augmented_train_rows,
                 "test_rows": len(x_test),
                 "train_seasons": ",".join(map(str, sorted(x_train["season"].unique()))),
                 "test_seasons": ",".join(map(str, sorted(x_test["season"].unique()))),

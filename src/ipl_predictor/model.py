@@ -12,7 +12,6 @@ from sklearn.preprocessing import OneHotEncoder
 def build_model_pipeline() -> Pipeline:
     categorical_features = ["team_1", "team_2", "venue"]
     numeric_features = [
-        "season",
         "team_1_recent_win_rate",
         "team_2_recent_win_rate",
         "recent_win_rate_diff",
