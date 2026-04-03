@@ -36,6 +36,12 @@ def load_csv(path: Path) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
+def load_optional_csv(path: Path) -> pd.DataFrame | None:
+    if not path.exists():
+        return None
+    return pd.read_csv(path)
+
+
 def load_historical_matches(path: Path) -> pd.DataFrame:
     required_columns = {
         "season",
@@ -86,3 +92,39 @@ def load_teams(path: Path) -> list[str]:
         raise ValueError("Teams file must include a 'team' column")
     df = normalize_team_columns(df, ["team"])
     return sorted(df["team"].dropna().astype(str).unique().tolist())
+
+
+def load_optional_match_player_strengths(path: Path) -> pd.DataFrame | None:
+    df = load_optional_csv(path)
+    if df is None:
+        return None
+    required_columns = {
+        "match_id",
+        "team_1_batting_strength",
+        "team_2_batting_strength",
+        "team_1_bowling_strength",
+        "team_2_bowling_strength",
+    }
+    missing = required_columns.difference(df.columns)
+    if missing:
+        raise ValueError(f"Match player strengths file is missing columns: {sorted(missing)}")
+    return df
+
+
+def load_optional_team_player_strengths(path: Path) -> dict[str, dict[str, float]]:
+    df = load_optional_csv(path)
+    if df is None:
+        return {}
+    required_columns = {"team", "batting_strength", "bowling_strength"}
+    missing = required_columns.difference(df.columns)
+    if missing:
+        raise ValueError(f"Team player strengths file is missing columns: {sorted(missing)}")
+    df = normalize_team_columns(df, ["team"])
+    df = df.dropna(subset=["team"])
+    return {
+        str(row.team): {
+            "batting_strength": float(row.batting_strength),
+            "bowling_strength": float(row.bowling_strength),
+        }
+        for row in df.itertuples(index=False)
+    }

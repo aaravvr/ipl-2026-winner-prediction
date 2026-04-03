@@ -30,6 +30,12 @@ def build_model_pipeline() -> Pipeline:
         "elo_diff",
         "team_1_expected_score",
         "team_2_expected_score",
+        "team_1_player_batting_strength",
+        "team_2_player_batting_strength",
+        "team_1_player_bowling_strength",
+        "team_2_player_bowling_strength",
+        "player_batting_strength_diff",
+        "player_bowling_strength_diff",
     ]
 
     preprocessor = ColumnTransformer(

@@ -28,6 +28,7 @@ IPL/
 |       |-- model.py
 |       `-- simulation.py
 |-- prepare_ball_by_ball_data.py
+|-- prepare_player_strength_features.py
 |-- train.py
 |-- simulate_2026.py
 `-- requirements.txt
@@ -76,6 +77,13 @@ Required columns:
 
 - `team`
 
+### Optional player-strength files
+
+- `data/raw/match_player_strengths.csv`
+- `data/raw/team_player_strengths_latest.csv`
+
+These are generated from the ball-by-ball source and let the model incorporate pre-match player-derived batting and bowling strength at the team level.
+
 ## Quick start
 
 1. Create a virtual environment and install dependencies.
@@ -88,6 +96,7 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 python prepare_ball_by_ball_data.py --source C:\Users\aarav\Desktop\IPL.csv
+python prepare_player_strength_features.py --source C:\Users\aarav\Desktop\IPL.csv
 python train.py
 python simulate_2026.py --n-simulations 5000
 ```
@@ -110,4 +119,5 @@ python simulate_2026.py --n-simulations 5000
 
 - The sample data included here is only for structure and smoke testing. It is not enough for a meaningful forecast.
 - This repo can now ingest the detailed ball-by-ball source at `C:\Users\aarav\Desktop\IPL.csv` and aggregate it into match history automatically.
+- It can also derive optional player-based team strength features from the same source before training.
 - The current setup is team-level. The next major upgrade would be player-level strength, expected XIs, injuries, auction outcomes, and venue-adjusted batting or bowling features.

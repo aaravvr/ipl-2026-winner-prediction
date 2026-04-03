@@ -11,7 +11,8 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from ipl_predictor.config import FEATURE_METADATA_PATH, HISTORICAL_MATCHES_PATH, MODEL_PATH, TRAINING_METRICS_PATH
-from ipl_predictor.data import load_historical_matches
+from ipl_predictor.config import MATCH_PLAYER_STRENGTHS_PATH
+from ipl_predictor.data import load_historical_matches, load_optional_match_player_strengths
 from ipl_predictor.features import build_training_frame
 from ipl_predictor.model import build_model_pipeline, evaluate_model, save_model
 
@@ -41,6 +42,9 @@ def time_based_split(training_frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.Dat
 
 def main() -> None:
     matches = load_historical_matches(HISTORICAL_MATCHES_PATH)
+    match_player_strengths = load_optional_match_player_strengths(MATCH_PLAYER_STRENGTHS_PATH)
+    if match_player_strengths is not None and "match_id" in matches.columns:
+        matches = matches.merge(match_player_strengths, on="match_id", how="left")
     training_frame = build_training_frame(matches)
 
     if len(training_frame) < 20:

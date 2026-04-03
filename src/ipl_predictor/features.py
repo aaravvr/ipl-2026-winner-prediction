@@ -86,6 +86,12 @@ def build_training_frame(
                 "elo_diff": team_1_elo - team_2_elo,
                 "team_1_expected_score": team_1_expected,
                 "team_2_expected_score": team_2_expected,
+                "team_1_player_batting_strength": float(getattr(match, "team_1_batting_strength", np.nan)),
+                "team_2_player_batting_strength": float(getattr(match, "team_2_batting_strength", np.nan)),
+                "team_1_player_bowling_strength": float(getattr(match, "team_1_bowling_strength", np.nan)),
+                "team_2_player_bowling_strength": float(getattr(match, "team_2_bowling_strength", np.nan)),
+                "player_batting_strength_diff": float(getattr(match, "batting_strength_diff", np.nan)),
+                "player_bowling_strength_diff": float(getattr(match, "bowling_strength_diff", np.nan)),
                 "target": 1 if winner == team_1 else 0,
             }
         )
@@ -141,6 +147,9 @@ def initialize_state(
     batting_totals: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     bowling_totals: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     elo_ratings: dict[str, float] = defaultdict(lambda: base_elo)
+    player_team_strengths: dict[str, dict[str, float]] = defaultdict(
+        lambda: {"batting_strength": 35.0, "bowling_strength": 18.0}
+    )
 
     for match in matches.sort_values(["date", "season"]).itertuples(index=False):
         team_1 = match.team_1
@@ -196,6 +205,7 @@ def initialize_state(
         "batting_totals": batting_totals,
         "bowling_totals": bowling_totals,
         "elo_ratings": elo_ratings,
+        "player_team_strengths": player_team_strengths,
         "recent_window": recent_window,
         "elo_k_factor": elo_k_factor,
         "base_elo": base_elo,
@@ -227,6 +237,8 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
     team_2_elo = state["elo_ratings"][team_2]
     team_1_expected = _expected_score(team_1_elo, team_2_elo)
     team_2_expected = 1.0 - team_1_expected
+    team_1_player_strengths = state["player_team_strengths"][team_1]
+    team_2_player_strengths = state["player_team_strengths"][team_2]
 
     toss_winner = match_row.get("toss_winner", team_1)
     toss_decision = match_row.get("toss_decision", "field")
@@ -257,6 +269,12 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
                 "elo_diff": team_1_elo - team_2_elo,
                 "team_1_expected_score": team_1_expected,
                 "team_2_expected_score": team_2_expected,
+                "team_1_player_batting_strength": team_1_player_strengths["batting_strength"],
+                "team_2_player_batting_strength": team_2_player_strengths["batting_strength"],
+                "team_1_player_bowling_strength": team_1_player_strengths["bowling_strength"],
+                "team_2_player_bowling_strength": team_2_player_strengths["bowling_strength"],
+                "player_batting_strength_diff": team_1_player_strengths["batting_strength"] - team_2_player_strengths["batting_strength"],
+                "player_bowling_strength_diff": team_1_player_strengths["bowling_strength"] - team_2_player_strengths["bowling_strength"],
             }
         ]
     )
@@ -332,6 +350,16 @@ def prepare_simulation_state(initial_state: dict) -> dict:
         "elo_ratings": defaultdict(
             lambda: initial_state["base_elo"],
             dict(initial_state["elo_ratings"]),
+        ),
+        "player_team_strengths": defaultdict(
+            lambda: {"batting_strength": 35.0, "bowling_strength": 18.0},
+            {
+                team: {
+                    "batting_strength": values["batting_strength"],
+                    "bowling_strength": values["bowling_strength"],
+                }
+                for team, values in initial_state["player_team_strengths"].items()
+            },
         ),
         "recent_window": initial_state["recent_window"],
         "elo_k_factor": initial_state["elo_k_factor"],
