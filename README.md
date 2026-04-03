@@ -100,6 +100,12 @@ python simulate_2026.py --n-simulations 5000
 - `artifacts/title_odds_2026.csv`: estimated title probabilities
 - `artifacts/last_simulation_table.csv`: most recent simulated league table summary
 
+## GitHub workflow
+
+- GitHub Actions runs on pushes to `main` and `codex/**` branches, plus pull requests into `main`.
+- The CI workflow installs dependencies, runs `python train.py`, and runs `python simulate_2026.py --n-simulations 20`.
+- After merging the CI branch, you can protect `main` in GitHub and require the `CI` status check before merge.
+
 ## Notes
 
 - The sample data included here is only for structure and smoke testing. It is not enough for a meaningful forecast.
