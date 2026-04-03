@@ -15,6 +15,13 @@ PLAYOFF_VENUES = {
     "final": "Narendra Modi Stadium",
 }
 
+LEAGUE_SCORE_BASELINE = 157.0
+LEAGUE_BATTING_STRENGTH = 33.0
+LEAGUE_BOWLING_STRENGTH = 17.0
+INNINGS_SCORE_STD = 18.0
+MIN_INNINGS_SCORE = 70.0
+MAX_INNINGS_SCORE = 260.0
+
 
 def _initialize_table(teams: list[str]) -> pd.DataFrame:
     table = pd.DataFrame({"team": teams})
@@ -30,37 +37,51 @@ def _initialize_table(teams: list[str]) -> pd.DataFrame:
     return table.set_index("team")
 
 
-def _estimate_scores(features: pd.DataFrame, winner: str, team_1: str, team_2: str, rng: np.random.Generator) -> tuple[float, float]:
+def _sample_margin(win_probability: float, rng: np.random.Generator) -> float:
+    closeness = abs(win_probability - 0.5)
+    median_margin = np.interp(closeness, [0.0, 0.3], [4.0, 32.0])
+    sigma = 1.0 if closeness < 0.12 else 0.8
+    sampled = rng.lognormal(mean=np.log(max(median_margin, 1.0)), sigma=sigma)
+    return float(np.clip(sampled, 1.0, 120.0))
+
+
+def _estimate_scores(
+    features: pd.DataFrame,
+    winner: str,
+    team_1: str,
+    team_2: str,
+    win_probability: float,
+    rng: np.random.Generator,
+) -> tuple[float, float]:
     row = features.iloc[0]
     venue_base = float(row["venue_avg_innings_score"])
-    league_score_baseline = 157.0
-    league_batting_strength = 33.0
-    league_bowling_strength = 17.0
 
     team_1_expected = (
         venue_base
         + 0.45 * (float(row["team_1_avg_runs_scored"]) - venue_base)
         + 0.30 * (float(row["team_2_avg_runs_conceded"]) - venue_base)
-        + 1.8 * (float(row["team_1_player_batting_strength"]) - league_batting_strength)
-        - 1.8 * (float(row["team_2_player_bowling_strength"]) - league_bowling_strength)
+        + 1.8 * (float(row["team_1_player_batting_strength"]) - LEAGUE_BATTING_STRENGTH)
+        - 1.8 * (float(row["team_2_player_bowling_strength"]) - LEAGUE_BOWLING_STRENGTH)
         + 14.0 * (float(row["team_1_expected_score"]) - 0.5)
     )
     team_2_expected = (
         venue_base
         + 0.45 * (float(row["team_2_avg_runs_scored"]) - venue_base)
         + 0.30 * (float(row["team_1_avg_runs_conceded"]) - venue_base)
-        + 1.8 * (float(row["team_2_player_batting_strength"]) - league_batting_strength)
-        - 1.8 * (float(row["team_1_player_bowling_strength"]) - league_bowling_strength)
+        + 1.8 * (float(row["team_2_player_batting_strength"]) - LEAGUE_BATTING_STRENGTH)
+        - 1.8 * (float(row["team_1_player_bowling_strength"]) - LEAGUE_BOWLING_STRENGTH)
         + 14.0 * (float(row["team_2_expected_score"]) - 0.5)
     )
-    margin_bias = abs(float(row["team_1_expected_score"]) - 0.5)
-    margin = max(4.0, 8.0 + 35.0 * margin_bias + rng.normal(0.0, 6.0))
-    team_1_score = min(260.0, max(110.0, team_1_expected + rng.normal(0.0, 9.0)))
-    team_2_score = min(260.0, max(110.0, team_2_expected + rng.normal(0.0, 9.0)))
+    total_bias = 0.35 * ((team_1_expected + team_2_expected) / 2.0 - LEAGUE_SCORE_BASELINE)
+    team_1_score = np.clip(team_1_expected + total_bias + rng.normal(0.0, INNINGS_SCORE_STD), MIN_INNINGS_SCORE, MAX_INNINGS_SCORE)
+    team_2_score = np.clip(team_2_expected + total_bias + rng.normal(0.0, INNINGS_SCORE_STD), MIN_INNINGS_SCORE, MAX_INNINGS_SCORE)
+    margin = _sample_margin(win_probability, rng)
     if winner == team_1 and team_1_score <= team_2_score:
         team_1_score = team_2_score + margin
     elif winner == team_2 and team_2_score <= team_1_score:
         team_2_score = team_1_score + margin
+    team_1_score = float(np.clip(team_1_score, MIN_INNINGS_SCORE, MAX_INNINGS_SCORE))
+    team_2_score = float(np.clip(team_2_score, MIN_INNINGS_SCORE, MAX_INNINGS_SCORE))
     return round(team_1_score, 1), round(team_2_score, 1)
 
 
@@ -108,7 +129,14 @@ def _simulate_match(model, match_row: pd.Series, state: dict, rng: np.random.Gen
     features = make_match_features(match_row, state)
     win_probability = float(model.predict_proba(features)[:, 1][0])
     winner = match_row["team_1"] if rng.random() < win_probability else match_row["team_2"]
-    team_1_score, team_2_score = _estimate_scores(features, winner, match_row["team_1"], match_row["team_2"], rng)
+    team_1_score, team_2_score = _estimate_scores(
+        features,
+        winner,
+        match_row["team_1"],
+        match_row["team_2"],
+        win_probability,
+        rng,
+    )
     state["current_venue"] = match_row["venue"]
     state["current_team_1_score"] = team_1_score
     state["current_team_2_score"] = team_2_score
