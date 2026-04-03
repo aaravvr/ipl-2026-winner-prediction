@@ -69,8 +69,8 @@ def build_model_pipeline() -> Pipeline:
     )
 
     model = AdaBoostClassifier(
-        n_estimators=300,
-        learning_rate=0.05,
+        n_estimators=150,
+        learning_rate=0.2,
         random_state=42,
     )
 
