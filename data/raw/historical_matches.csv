@@ -1,62 +1,62 @@
 match_id,date,season,venue,city,toss_winner,toss_decision,winner,win_outcome,result_type,method,team_1,team_2,team_1_score,team_1_wickets_lost,team_2_score,team_2_wickets_lost,team_1_won,margin_runs,margin_wickets
-335982,2008-04-18,2007,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Kolkata Knight Riders,140 runs,,,Kolkata Knight Riders,Royal Challengers Bengaluru,222,3,82,10,1,140,0
-335983,2008-04-19,2007,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Chennai Super Kings,bat,Chennai Super Kings,33 runs,,,Chennai Super Kings,Punjab Kings,240,5,207,4,1,33,0
-335984,2008-04-19,2007,Feroz Shah Kotla,Delhi,Rajasthan Royals,bat,Delhi Capitals,9 wickets,,,Rajasthan Royals,Delhi Capitals,129,8,132,1,0,0,9
-335985,2008-04-20,2007,Wankhede Stadium,Mumbai,Mumbai Indians,bat,Royal Challengers Bengaluru,5 wickets,,,Mumbai Indians,Royal Challengers Bengaluru,165,6,166,5,0,0,5
-335986,2008-04-20,2007,Eden Gardens,Kolkata,Deccan Chargers,bat,Kolkata Knight Riders,5 wickets,,,Deccan Chargers,Kolkata Knight Riders,110,10,112,5,0,0,5
-335987,2008-04-21,2007,Sawai Mansingh Stadium,Jaipur,Punjab Kings,bat,Rajasthan Royals,6 wickets,,,Punjab Kings,Rajasthan Royals,166,8,168,4,0,0,6
-335988,2008-04-22,2007,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Deccan Chargers,bat,Delhi Capitals,9 wickets,,,Deccan Chargers,Delhi Capitals,142,8,143,1,0,0,9
-335989,2008-04-23,2007,"MA Chidambaram Stadium, Chepauk",Chennai,Mumbai Indians,field,Chennai Super Kings,6 runs,,,Chennai Super Kings,Mumbai Indians,208,5,202,7,1,6,0
-335990,2008-04-24,2007,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Rajasthan Royals,field,Rajasthan Royals,3 wickets,,,Deccan Chargers,Rajasthan Royals,214,5,217,7,0,0,3
-335991,2008-04-25,2007,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Mumbai Indians,field,Punjab Kings,66 runs,,,Punjab Kings,Mumbai Indians,182,10,116,9,1,66,0
-335992,2008-04-26,2007,M Chinnaswamy Stadium,Bangalore,Rajasthan Royals,field,Rajasthan Royals,7 wickets,,,Royal Challengers Bengaluru,Rajasthan Royals,135,8,138,3,0,0,7
-335993,2008-04-26,2007,"MA Chidambaram Stadium, Chepauk",Chennai,Kolkata Knight Riders,bat,Chennai Super Kings,9 wickets,,,Kolkata Knight Riders,Chennai Super Kings,147,9,152,1,0,0,9
-335994,2008-04-27,2007,Dr DY Patil Sports Academy,Mumbai,Deccan Chargers,field,Deccan Chargers,10 wickets,,,Mumbai Indians,Deccan Chargers,154,7,155,0,0,0,10
-335995,2008-04-27,2007,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Delhi Capitals,bat,Punjab Kings,4 wickets,,,Delhi Capitals,Punjab Kings,158,8,162,6,0,0,4
-335996,2008-04-28,2007,M Chinnaswamy Stadium,Bangalore,Chennai Super Kings,bat,Chennai Super Kings,13 runs,,,Chennai Super Kings,Royal Challengers Bengaluru,178,5,165,10,1,13,0
-335997,2008-04-29,2007,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Mumbai Indians,7 wickets,,,Kolkata Knight Riders,Mumbai Indians,137,8,138,3,0,0,7
-335998,2008-04-30,2007,Feroz Shah Kotla,Delhi,Royal Challengers Bengaluru,field,Delhi Capitals,10 runs,,,Delhi Capitals,Royal Challengers Bengaluru,191,5,181,5,1,10,0
-335999,2008-05-01,2007,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Punjab Kings,field,Punjab Kings,7 wickets,,,Deccan Chargers,Punjab Kings,164,8,167,3,0,0,7
-336000,2008-05-01,2007,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,bat,Rajasthan Royals,45 runs,,,Rajasthan Royals,Kolkata Knight Riders,196,7,151,10,1,45,0
-336001,2008-05-02,2007,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Delhi Capitals,8 wickets,,,Chennai Super Kings,Delhi Capitals,169,6,172,2,0,0,8
-336003,2008-05-03,2007,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Punjab Kings,bat,Punjab Kings,9 runs,,,Punjab Kings,Kolkata Knight Riders,178,6,169,6,1,9,0
-336034,2008-05-03,2007,M Chinnaswamy Stadium,Bangalore,Deccan Chargers,field,Royal Challengers Bengaluru,3 runs,,,Royal Challengers Bengaluru,Deccan Chargers,156,8,153,6,1,3,0
-336004,2008-05-04,2007,Dr DY Patil Sports Academy,Mumbai,Delhi Capitals,field,Mumbai Indians,29 runs,,,Mumbai Indians,Delhi Capitals,162,8,133,10,1,29,0
-336005,2008-05-04,2007,Sawai Mansingh Stadium,Jaipur,Chennai Super Kings,bat,Rajasthan Royals,8 wickets,,,Chennai Super Kings,Rajasthan Royals,109,10,110,2,0,0,8
-336006,2008-05-05,2007,M Chinnaswamy Stadium,Bangalore,Punjab Kings,field,Punjab Kings,6 wickets,,,Royal Challengers Bengaluru,Punjab Kings,126,10,127,4,0,0,6
-336007,2008-05-06,2007,"MA Chidambaram Stadium, Chepauk",Chennai,Deccan Chargers,field,Deccan Chargers,7 wickets,,,Chennai Super Kings,Deccan Chargers,144,7,148,3,0,0,7
-336008,2008-05-07,2007,Dr DY Patil Sports Academy,Mumbai,Mumbai Indians,field,Mumbai Indians,7 wickets,,,Rajasthan Royals,Mumbai Indians,103,10,104,3,0,0,7
-336009,2008-05-08,2007,Feroz Shah Kotla,Delhi,Chennai Super Kings,field,Chennai Super Kings,4 wickets,,,Delhi Capitals,Chennai Super Kings,187,5,188,6,0,0,4
-336010,2008-05-08,2007,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Kolkata Knight Riders,5 runs,,,Kolkata Knight Riders,Royal Challengers Bengaluru,129,7,124,4,1,5,0
-336011,2008-05-09,2007,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,field,Rajasthan Royals,8 wickets,,,Deccan Chargers,Rajasthan Royals,140,8,141,2,0,0,8
-336013,2008-05-10,2007,"MA Chidambaram Stadium, Chepauk",Chennai,Punjab Kings,field,Chennai Super Kings,18 runs,,,Chennai Super Kings,Punjab Kings,181,4,163,9,1,18,0
-336014,2008-05-11,2007,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Kolkata Knight Riders,bat,Kolkata Knight Riders,23 runs,,,Kolkata Knight Riders,Deccan Chargers,204,4,181,7,1,23,0
-336015,2008-05-11,2007,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,field,Rajasthan Royals,3 wickets,,,Delhi Capitals,Rajasthan Royals,156,7,159,7,0,0,3
-336016,2008-05-12,2007,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Royal Challengers Bengaluru,bat,Punjab Kings,9 wickets,,,Royal Challengers Bengaluru,Punjab Kings,143,8,144,1,0,0,9
-336017,2008-05-13,2007,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Kolkata Knight Riders,23 runs,,,Kolkata Knight Riders,Delhi Capitals,133,6,110,10,1,23,0
-336018,2008-05-14,2007,Wankhede Stadium,Mumbai,Mumbai Indians,field,Mumbai Indians,9 wickets,,,Chennai Super Kings,Mumbai Indians,156,6,158,1,0,0,9
-336020,2008-05-15,2007,Feroz Shah Kotla,Delhi,Deccan Chargers,field,Delhi Capitals,12 runs,,,Delhi Capitals,Deccan Chargers,194,4,182,9,1,12,0
-336021,2008-05-16,2007,Wankhede Stadium,Mumbai,Mumbai Indians,field,Mumbai Indians,8 wickets,,,Kolkata Knight Riders,Mumbai Indians,67,10,68,2,0,0,8
-336022,2008-05-17,2007,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Punjab Kings,6 runs,,D/L,Delhi Capitals,Punjab Kings,118,4,94,3,0,0,7
-336023,2008-05-17,2007,Sawai Mansingh Stadium,Jaipur,Royal Challengers Bengaluru,field,Rajasthan Royals,65 runs,,,Rajasthan Royals,Royal Challengers Bengaluru,197,1,132,9,1,65,0
-336024,2008-05-18,2007,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Deccan Chargers,field,Mumbai Indians,25 runs,,,Mumbai Indians,Deccan Chargers,178,7,153,7,1,25,0
-336025,2008-05-18,2007,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Chennai Super Kings,3 runs,,D/L,Kolkata Knight Riders,Chennai Super Kings,149,5,55,0,0,0,10
-336026,2008-05-19,2007,M Chinnaswamy Stadium,Bangalore,Delhi Capitals,field,Delhi Capitals,5 wickets,,,Royal Challengers Bengaluru,Delhi Capitals,154,7,158,5,0,0,5
-336027,2008-05-20,2007,Eden Gardens,Kolkata,Rajasthan Royals,field,Rajasthan Royals,6 wickets,,,Kolkata Knight Riders,Rajasthan Royals,147,8,150,4,0,0,6
-336028,2008-05-21,2007,Wankhede Stadium,Mumbai,Mumbai Indians,field,Punjab Kings,1 runs,,,Punjab Kings,Mumbai Indians,189,4,188,10,1,1,0
-336029,2008-05-21,2007,"MA Chidambaram Stadium, Chepauk",Chennai,Royal Challengers Bengaluru,bat,Royal Challengers Bengaluru,14 runs,,,Royal Challengers Bengaluru,Chennai Super Kings,126,8,112,8,1,14,0
-336031,2008-05-23,2007,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Punjab Kings,field,Punjab Kings,6 wickets,,,Deccan Chargers,Punjab Kings,175,4,178,4,0,0,6
-336032,2008-05-24,2007,Feroz Shah Kotla,Delhi,Delhi Capitals,field,Delhi Capitals,5 wickets,,,Mumbai Indians,Delhi Capitals,176,8,179,5,0,0,5
-336033,2008-05-24,2007,"MA Chidambaram Stadium, Chepauk",Chennai,Rajasthan Royals,bat,Rajasthan Royals,10 runs,,,Rajasthan Royals,Chennai Super Kings,211,5,201,7,1,10,0
-336002,2008-05-25,2007,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Deccan Chargers,bat,Royal Challengers Bengaluru,5 wickets,,,Deccan Chargers,Royal Challengers Bengaluru,165,10,171,5,0,0,5
-336035,2008-05-25,2007,Eden Gardens,Kolkata,Punjab Kings,bat,Kolkata Knight Riders,3 wickets,,,Punjab Kings,Kolkata Knight Riders,174,6,175,7,0,0,3
-336036,2008-05-26,2007,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,field,Rajasthan Royals,5 wickets,,,Mumbai Indians,Rajasthan Royals,145,7,146,5,0,0,5
-336037,2008-05-27,2007,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Deccan Chargers,bat,Chennai Super Kings,7 wickets,,,Deccan Chargers,Chennai Super Kings,147,8,148,3,0,0,7
-336012,2008-05-28,2007,M Chinnaswamy Stadium,Bangalore,Mumbai Indians,field,Mumbai Indians,9 wickets,,,Royal Challengers Bengaluru,Mumbai Indians,122,9,126,1,0,0,9
-336019,2008-05-28,2007,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Rajasthan Royals,field,Punjab Kings,41 runs,,,Punjab Kings,Rajasthan Royals,221,3,180,7,1,41,0
-336038,2008-05-30,2007,Wankhede Stadium,Mumbai,Delhi Capitals,field,Rajasthan Royals,105 runs,,,Rajasthan Royals,Delhi Capitals,192,9,87,10,1,105,0
-336039,2008-05-31,2007,Wankhede Stadium,Mumbai,Punjab Kings,bat,Chennai Super Kings,9 wickets,,,Punjab Kings,Chennai Super Kings,112,8,116,1,0,0,9
-336040,2008-06-01,2007,Dr DY Patil Sports Academy,Mumbai,Rajasthan Royals,field,Rajasthan Royals,3 wickets,,,Chennai Super Kings,Rajasthan Royals,163,5,164,7,0,0,3
+335982,2008-04-18,2008,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Kolkata Knight Riders,140 runs,,,Kolkata Knight Riders,Royal Challengers Bengaluru,222,3,82,10,1,140,0
+335983,2008-04-19,2008,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Chennai Super Kings,bat,Chennai Super Kings,33 runs,,,Chennai Super Kings,Punjab Kings,240,5,207,4,1,33,0
+335984,2008-04-19,2008,Feroz Shah Kotla,Delhi,Rajasthan Royals,bat,Delhi Capitals,9 wickets,,,Rajasthan Royals,Delhi Capitals,129,8,132,1,0,0,9
+335985,2008-04-20,2008,Wankhede Stadium,Mumbai,Mumbai Indians,bat,Royal Challengers Bengaluru,5 wickets,,,Mumbai Indians,Royal Challengers Bengaluru,165,6,166,5,0,0,5
+335986,2008-04-20,2008,Eden Gardens,Kolkata,Deccan Chargers,bat,Kolkata Knight Riders,5 wickets,,,Deccan Chargers,Kolkata Knight Riders,110,10,112,5,0,0,5
+335987,2008-04-21,2008,Sawai Mansingh Stadium,Jaipur,Punjab Kings,bat,Rajasthan Royals,6 wickets,,,Punjab Kings,Rajasthan Royals,166,8,168,4,0,0,6
+335988,2008-04-22,2008,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Deccan Chargers,bat,Delhi Capitals,9 wickets,,,Deccan Chargers,Delhi Capitals,142,8,143,1,0,0,9
+335989,2008-04-23,2008,"MA Chidambaram Stadium, Chepauk",Chennai,Mumbai Indians,field,Chennai Super Kings,6 runs,,,Chennai Super Kings,Mumbai Indians,208,5,202,7,1,6,0
+335990,2008-04-24,2008,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Rajasthan Royals,field,Rajasthan Royals,3 wickets,,,Deccan Chargers,Rajasthan Royals,214,5,217,7,0,0,3
+335991,2008-04-25,2008,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Mumbai Indians,field,Punjab Kings,66 runs,,,Punjab Kings,Mumbai Indians,182,10,116,9,1,66,0
+335992,2008-04-26,2008,M Chinnaswamy Stadium,Bangalore,Rajasthan Royals,field,Rajasthan Royals,7 wickets,,,Royal Challengers Bengaluru,Rajasthan Royals,135,8,138,3,0,0,7
+335993,2008-04-26,2008,"MA Chidambaram Stadium, Chepauk",Chennai,Kolkata Knight Riders,bat,Chennai Super Kings,9 wickets,,,Kolkata Knight Riders,Chennai Super Kings,147,9,152,1,0,0,9
+335994,2008-04-27,2008,Dr DY Patil Sports Academy,Mumbai,Deccan Chargers,field,Deccan Chargers,10 wickets,,,Mumbai Indians,Deccan Chargers,154,7,155,0,0,0,10
+335995,2008-04-27,2008,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Delhi Capitals,bat,Punjab Kings,4 wickets,,,Delhi Capitals,Punjab Kings,158,8,162,6,0,0,4
+335996,2008-04-28,2008,M Chinnaswamy Stadium,Bangalore,Chennai Super Kings,bat,Chennai Super Kings,13 runs,,,Chennai Super Kings,Royal Challengers Bengaluru,178,5,165,10,1,13,0
+335997,2008-04-29,2008,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Mumbai Indians,7 wickets,,,Kolkata Knight Riders,Mumbai Indians,137,8,138,3,0,0,7
+335998,2008-04-30,2008,Feroz Shah Kotla,Delhi,Royal Challengers Bengaluru,field,Delhi Capitals,10 runs,,,Delhi Capitals,Royal Challengers Bengaluru,191,5,181,5,1,10,0
+335999,2008-05-01,2008,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Punjab Kings,field,Punjab Kings,7 wickets,,,Deccan Chargers,Punjab Kings,164,8,167,3,0,0,7
+336000,2008-05-01,2008,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,bat,Rajasthan Royals,45 runs,,,Rajasthan Royals,Kolkata Knight Riders,196,7,151,10,1,45,0
+336001,2008-05-02,2008,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Delhi Capitals,8 wickets,,,Chennai Super Kings,Delhi Capitals,169,6,172,2,0,0,8
+336003,2008-05-03,2008,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Punjab Kings,bat,Punjab Kings,9 runs,,,Punjab Kings,Kolkata Knight Riders,178,6,169,6,1,9,0
+336034,2008-05-03,2008,M Chinnaswamy Stadium,Bangalore,Deccan Chargers,field,Royal Challengers Bengaluru,3 runs,,,Royal Challengers Bengaluru,Deccan Chargers,156,8,153,6,1,3,0
+336004,2008-05-04,2008,Dr DY Patil Sports Academy,Mumbai,Delhi Capitals,field,Mumbai Indians,29 runs,,,Mumbai Indians,Delhi Capitals,162,8,133,10,1,29,0
+336005,2008-05-04,2008,Sawai Mansingh Stadium,Jaipur,Chennai Super Kings,bat,Rajasthan Royals,8 wickets,,,Chennai Super Kings,Rajasthan Royals,109,10,110,2,0,0,8
+336006,2008-05-05,2008,M Chinnaswamy Stadium,Bangalore,Punjab Kings,field,Punjab Kings,6 wickets,,,Royal Challengers Bengaluru,Punjab Kings,126,10,127,4,0,0,6
+336007,2008-05-06,2008,"MA Chidambaram Stadium, Chepauk",Chennai,Deccan Chargers,field,Deccan Chargers,7 wickets,,,Chennai Super Kings,Deccan Chargers,144,7,148,3,0,0,7
+336008,2008-05-07,2008,Dr DY Patil Sports Academy,Mumbai,Mumbai Indians,field,Mumbai Indians,7 wickets,,,Rajasthan Royals,Mumbai Indians,103,10,104,3,0,0,7
+336009,2008-05-08,2008,Feroz Shah Kotla,Delhi,Chennai Super Kings,field,Chennai Super Kings,4 wickets,,,Delhi Capitals,Chennai Super Kings,187,5,188,6,0,0,4
+336010,2008-05-08,2008,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Kolkata Knight Riders,5 runs,,,Kolkata Knight Riders,Royal Challengers Bengaluru,129,7,124,4,1,5,0
+336011,2008-05-09,2008,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,field,Rajasthan Royals,8 wickets,,,Deccan Chargers,Rajasthan Royals,140,8,141,2,0,0,8
+336013,2008-05-10,2008,"MA Chidambaram Stadium, Chepauk",Chennai,Punjab Kings,field,Chennai Super Kings,18 runs,,,Chennai Super Kings,Punjab Kings,181,4,163,9,1,18,0
+336014,2008-05-11,2008,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Kolkata Knight Riders,bat,Kolkata Knight Riders,23 runs,,,Kolkata Knight Riders,Deccan Chargers,204,4,181,7,1,23,0
+336015,2008-05-11,2008,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,field,Rajasthan Royals,3 wickets,,,Delhi Capitals,Rajasthan Royals,156,7,159,7,0,0,3
+336016,2008-05-12,2008,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Royal Challengers Bengaluru,bat,Punjab Kings,9 wickets,,,Royal Challengers Bengaluru,Punjab Kings,143,8,144,1,0,0,9
+336017,2008-05-13,2008,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Kolkata Knight Riders,23 runs,,,Kolkata Knight Riders,Delhi Capitals,133,6,110,10,1,23,0
+336018,2008-05-14,2008,Wankhede Stadium,Mumbai,Mumbai Indians,field,Mumbai Indians,9 wickets,,,Chennai Super Kings,Mumbai Indians,156,6,158,1,0,0,9
+336020,2008-05-15,2008,Feroz Shah Kotla,Delhi,Deccan Chargers,field,Delhi Capitals,12 runs,,,Delhi Capitals,Deccan Chargers,194,4,182,9,1,12,0
+336021,2008-05-16,2008,Wankhede Stadium,Mumbai,Mumbai Indians,field,Mumbai Indians,8 wickets,,,Kolkata Knight Riders,Mumbai Indians,67,10,68,2,0,0,8
+336022,2008-05-17,2008,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Punjab Kings,6 runs,,D/L,Delhi Capitals,Punjab Kings,118,4,94,3,0,0,7
+336023,2008-05-17,2008,Sawai Mansingh Stadium,Jaipur,Royal Challengers Bengaluru,field,Rajasthan Royals,65 runs,,,Rajasthan Royals,Royal Challengers Bengaluru,197,1,132,9,1,65,0
+336024,2008-05-18,2008,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Deccan Chargers,field,Mumbai Indians,25 runs,,,Mumbai Indians,Deccan Chargers,178,7,153,7,1,25,0
+336025,2008-05-18,2008,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Chennai Super Kings,3 runs,,D/L,Kolkata Knight Riders,Chennai Super Kings,149,5,55,0,0,0,10
+336026,2008-05-19,2008,M Chinnaswamy Stadium,Bangalore,Delhi Capitals,field,Delhi Capitals,5 wickets,,,Royal Challengers Bengaluru,Delhi Capitals,154,7,158,5,0,0,5
+336027,2008-05-20,2008,Eden Gardens,Kolkata,Rajasthan Royals,field,Rajasthan Royals,6 wickets,,,Kolkata Knight Riders,Rajasthan Royals,147,8,150,4,0,0,6
+336028,2008-05-21,2008,Wankhede Stadium,Mumbai,Mumbai Indians,field,Punjab Kings,1 runs,,,Punjab Kings,Mumbai Indians,189,4,188,10,1,1,0
+336029,2008-05-21,2008,"MA Chidambaram Stadium, Chepauk",Chennai,Royal Challengers Bengaluru,bat,Royal Challengers Bengaluru,14 runs,,,Royal Challengers Bengaluru,Chennai Super Kings,126,8,112,8,1,14,0
+336031,2008-05-23,2008,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Punjab Kings,field,Punjab Kings,6 wickets,,,Deccan Chargers,Punjab Kings,175,4,178,4,0,0,6
+336032,2008-05-24,2008,Feroz Shah Kotla,Delhi,Delhi Capitals,field,Delhi Capitals,5 wickets,,,Mumbai Indians,Delhi Capitals,176,8,179,5,0,0,5
+336033,2008-05-24,2008,"MA Chidambaram Stadium, Chepauk",Chennai,Rajasthan Royals,bat,Rajasthan Royals,10 runs,,,Rajasthan Royals,Chennai Super Kings,211,5,201,7,1,10,0
+336002,2008-05-25,2008,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Deccan Chargers,bat,Royal Challengers Bengaluru,5 wickets,,,Deccan Chargers,Royal Challengers Bengaluru,165,10,171,5,0,0,5
+336035,2008-05-25,2008,Eden Gardens,Kolkata,Punjab Kings,bat,Kolkata Knight Riders,3 wickets,,,Punjab Kings,Kolkata Knight Riders,174,6,175,7,0,0,3
+336036,2008-05-26,2008,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,field,Rajasthan Royals,5 wickets,,,Mumbai Indians,Rajasthan Royals,145,7,146,5,0,0,5
+336037,2008-05-27,2008,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Deccan Chargers,bat,Chennai Super Kings,7 wickets,,,Deccan Chargers,Chennai Super Kings,147,8,148,3,0,0,7
+336012,2008-05-28,2008,M Chinnaswamy Stadium,Bangalore,Mumbai Indians,field,Mumbai Indians,9 wickets,,,Royal Challengers Bengaluru,Mumbai Indians,122,9,126,1,0,0,9
+336019,2008-05-28,2008,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Rajasthan Royals,field,Punjab Kings,41 runs,,,Punjab Kings,Rajasthan Royals,221,3,180,7,1,41,0
+336038,2008-05-30,2008,Wankhede Stadium,Mumbai,Delhi Capitals,field,Rajasthan Royals,105 runs,,,Rajasthan Royals,Delhi Capitals,192,9,87,10,1,105,0
+336039,2008-05-31,2008,Wankhede Stadium,Mumbai,Punjab Kings,bat,Chennai Super Kings,9 wickets,,,Punjab Kings,Chennai Super Kings,112,8,116,1,0,0,9
+336040,2008-06-01,2008,Dr DY Patil Sports Academy,Mumbai,Rajasthan Royals,field,Rajasthan Royals,3 wickets,,,Chennai Super Kings,Rajasthan Royals,163,5,164,7,0,0,3
 392181,2009-04-18,2009,Newlands,Cape Town,Chennai Super Kings,field,Mumbai Indians,19 runs,,,Mumbai Indians,Chennai Super Kings,165,7,146,7,1,19,0
 392182,2009-04-18,2009,Newlands,Cape Town,Royal Challengers Bengaluru,bat,Royal Challengers Bengaluru,75 runs,,,Royal Challengers Bengaluru,Rajasthan Royals,133,8,58,10,1,75,0
 392183,2009-04-19,2009,Newlands,Cape Town,Delhi Capitals,field,Delhi Capitals,10 wickets,,D/L,Punjab Kings,Delhi Capitals,104,7,58,0,0,0,10
@@ -113,65 +113,65 @@ match_id,date,season,venue,city,toss_winner,toss_decision,winner,win_outcome,res
 392237,2009-05-22,2009,SuperSport Park,Centurion,Deccan Chargers,field,Deccan Chargers,6 wickets,,,Delhi Capitals,Deccan Chargers,153,8,154,4,0,0,6
 392238,2009-05-23,2009,New Wanderers Stadium,Johannesburg,Royal Challengers Bengaluru,field,Royal Challengers Bengaluru,6 wickets,,,Chennai Super Kings,Royal Challengers Bengaluru,146,5,149,4,0,0,6
 392239,2009-05-24,2009,New Wanderers Stadium,Johannesburg,Royal Challengers Bengaluru,field,Deccan Chargers,6 runs,,,Deccan Chargers,Royal Challengers Bengaluru,143,6,137,9,1,6,0
-419106,2010-03-12,2009,Dr DY Patil Sports Academy,Mumbai,Deccan Chargers,field,Kolkata Knight Riders,11 runs,,,Kolkata Knight Riders,Deccan Chargers,161,4,150,7,1,11,0
-419107,2010-03-13,2009,Brabourne Stadium,Mumbai,Mumbai Indians,bat,Mumbai Indians,4 runs,,,Mumbai Indians,Rajasthan Royals,212,6,208,7,1,4,0
-419108,2010-03-13,2009,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Delhi Capitals,field,Delhi Capitals,5 wickets,,,Punjab Kings,Delhi Capitals,142,9,146,5,0,0,5
-419109,2010-03-14,2009,Eden Gardens,Kolkata,Kolkata Knight Riders,field,Kolkata Knight Riders,7 wickets,,,Royal Challengers Bengaluru,Kolkata Knight Riders,135,7,136,3,0,0,7
-419110,2010-03-14,2009,"MA Chidambaram Stadium, Chepauk",Chennai,Deccan Chargers,bat,Deccan Chargers,31 runs,,,Deccan Chargers,Chennai Super Kings,190,4,159,9,1,31,0
-419111,2010-03-15,2009,"Sardar Patel Stadium, Motera",Ahmedabad,Delhi Capitals,field,Delhi Capitals,6 wickets,,,Rajasthan Royals,Delhi Capitals,141,6,142,4,0,0,6
-419112,2010-03-16,2009,M Chinnaswamy Stadium,Bangalore,Punjab Kings,bat,Royal Challengers Bengaluru,8 wickets,,,Punjab Kings,Royal Challengers Bengaluru,203,3,204,2,0,0,8
-419113,2010-03-16,2009,Eden Gardens,Kolkata,Chennai Super Kings,bat,Chennai Super Kings,55 runs,,,Chennai Super Kings,Kolkata Knight Riders,164,3,109,10,1,55,0
-419114,2010-03-17,2009,Feroz Shah Kotla,Delhi,Delhi Capitals,field,Mumbai Indians,98 runs,,,Mumbai Indians,Delhi Capitals,218,7,120,9,1,98,0
-419115,2010-03-18,2009,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Royal Challengers Bengaluru,10 wickets,,,Rajasthan Royals,Royal Challengers Bengaluru,92,10,93,0,0,0,10
-419116,2010-03-19,2009,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Chennai Super Kings,5 wickets,,,Delhi Capitals,Chennai Super Kings,185,6,190,5,0,0,5
-419117,2010-03-19,2009,Barabati Stadium,Cuttack,Punjab Kings,field,Deccan Chargers,6 runs,,,Deccan Chargers,Punjab Kings,170,7,164,8,1,6,0
-419118,2010-03-20,2009,"Sardar Patel Stadium, Motera",Ahmedabad,Rajasthan Royals,bat,Rajasthan Royals,34 runs,,,Rajasthan Royals,Kolkata Knight Riders,168,7,134,5,1,34,0
-419119,2010-03-20,2009,Brabourne Stadium,Mumbai,Mumbai Indians,bat,Royal Challengers Bengaluru,7 wickets,,,Mumbai Indians,Royal Challengers Bengaluru,151,9,155,3,0,0,7
-419120,2010-03-21,2009,Barabati Stadium,Cuttack,Deccan Chargers,bat,Deccan Chargers,10 runs,,,Deccan Chargers,Delhi Capitals,171,6,161,9,1,10,0
-419122,2010-03-22,2009,Brabourne Stadium,Mumbai,Kolkata Knight Riders,bat,Mumbai Indians,7 wickets,,,Kolkata Knight Riders,Mumbai Indians,155,3,156,3,0,0,7
-419123,2010-03-23,2009,M Chinnaswamy Stadium,Bangalore,Chennai Super Kings,field,Royal Challengers Bengaluru,36 runs,,,Royal Challengers Bengaluru,Chennai Super Kings,171,5,135,7,1,36,0
-419124,2010-03-24,2009,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Punjab Kings,field,Rajasthan Royals,31 runs,,,Rajasthan Royals,Punjab Kings,183,5,152,10,1,31,0
-419125,2010-03-25,2009,"Brabourne Stadium, Mumbai",Mumbai,Mumbai Indians,field,Mumbai Indians,5 wickets,,,Chennai Super Kings,Mumbai Indians,180,2,181,5,0,0,5
-419128,2010-03-25,2009,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Delhi Capitals,17 runs,,,Delhi Capitals,Royal Challengers Bengaluru,183,4,166,9,1,17,0
-419126,2010-03-26,2009,"Sardar Patel Stadium, Motera",Ahmedabad,Deccan Chargers,bat,Rajasthan Royals,8 wickets,,,Deccan Chargers,Rajasthan Royals,148,9,151,2,0,0,8
-419127,2010-03-27,2009,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Kolkata Knight Riders,bat,Kolkata Knight Riders,39 runs,,,Kolkata Knight Riders,Punjab Kings,183,5,144,6,1,39,0
-419129,2010-03-28,2009,"Sardar Patel Stadium, Motera",Ahmedabad,Rajasthan Royals,bat,Rajasthan Royals,17 runs,,,Rajasthan Royals,Chennai Super Kings,177,8,160,6,1,17,0
-419130,2010-03-28,2009,Dr DY Patil Sports Academy,Mumbai,Deccan Chargers,field,Mumbai Indians,41 runs,,,Mumbai Indians,Deccan Chargers,172,7,131,10,1,41,0
-419131,2010-03-29,2009,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Delhi Capitals,40 runs,,,Delhi Capitals,Kolkata Knight Riders,177,4,137,9,1,40,0
-419132,2010-03-30,2009,Brabourne Stadium,Mumbai,Mumbai Indians,field,Mumbai Indians,4 wickets,,,Punjab Kings,Mumbai Indians,163,10,164,6,0,0,4
-419133,2010-03-31,2009,"MA Chidambaram Stadium, Chepauk",Chennai,Royal Challengers Bengaluru,bat,Chennai Super Kings,5 wickets,,,Royal Challengers Bengaluru,Chennai Super Kings,161,4,162,5,0,0,5
-419134,2010-03-31,2009,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Delhi Capitals,67 runs,,,Delhi Capitals,Rajasthan Royals,188,6,121,10,1,67,0
-419135,2010-04-01,2009,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Kolkata Knight Riders,24 runs,,,Kolkata Knight Riders,Deccan Chargers,181,6,157,5,1,24,0
-419136,2010-04-02,2009,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Punjab Kings,bat,Royal Challengers Bengaluru,6 wickets,,,Punjab Kings,Royal Challengers Bengaluru,181,5,184,4,0,0,6
-419137,2010-04-03,2009,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Chennai Super Kings,23 runs,,,Chennai Super Kings,Rajasthan Royals,246,5,223,5,1,23,0
-419138,2010-04-03,2009,Brabourne Stadium,Mumbai,Mumbai Indians,bat,Mumbai Indians,63 runs,,,Mumbai Indians,Deccan Chargers,178,5,115,10,1,63,0
-419139,2010-04-04,2009,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Punjab Kings,8 wickets,,,Kolkata Knight Riders,Punjab Kings,200,3,204,2,0,0,8
-419140,2010-04-04,2009,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Delhi Capitals,37 runs,,,Delhi Capitals,Royal Challengers Bengaluru,184,5,147,9,1,37,0
-419141,2010-04-05,2009,"Vidarbha Cricket Association Stadium, Jamtha",Nagpur,Rajasthan Royals,bat,Rajasthan Royals,2 runs,,,Rajasthan Royals,Deccan Chargers,159,10,157,10,1,2,0
-419142,2010-04-06,2009,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Chennai Super Kings,24 runs,,,Chennai Super Kings,Mumbai Indians,165,4,141,9,1,24,0
-419143,2010-04-07,2009,Sawai Mansingh Stadium,Jaipur,Punjab Kings,bat,Rajasthan Royals,9 wickets,,,Punjab Kings,Rajasthan Royals,153,6,157,1,0,0,9
-419144,2010-04-07,2009,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Kolkata Knight Riders,14 runs,,,Kolkata Knight Riders,Delhi Capitals,181,3,167,8,1,14,0
-419145,2010-04-08,2009,M Chinnaswamy Stadium,Bangalore,Deccan Chargers,field,Deccan Chargers,7 wickets,,,Royal Challengers Bengaluru,Deccan Chargers,184,6,186,3,0,0,7
-419146,2010-04-09,2009,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Mumbai Indians,bat,Punjab Kings,6 wickets,,,Mumbai Indians,Punjab Kings,154,9,158,4,0,0,6
-419147,2010-04-10,2009,"Vidarbha Cricket Association Stadium, Jamtha",Nagpur,Chennai Super Kings,bat,Deccan Chargers,6 wickets,,,Chennai Super Kings,Deccan Chargers,138,8,139,4,0,0,6
-419148,2010-04-10,2009,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Royal Challengers Bengaluru,7 wickets,,,Kolkata Knight Riders,Royal Challengers Bengaluru,160,9,162,3,0,0,7
-419149,2010-04-11,2009,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Punjab Kings,7 wickets,,,Delhi Capitals,Punjab Kings,111,10,112,3,0,0,7
-419150,2010-04-11,2009,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,field,Mumbai Indians,37 runs,,,Mumbai Indians,Rajasthan Royals,174,5,137,8,1,37,0
-419151,2010-04-12,2009,"Vidarbha Cricket Association Stadium, Jamtha",Nagpur,Royal Challengers Bengaluru,field,Deccan Chargers,13 runs,,,Deccan Chargers,Royal Challengers Bengaluru,151,6,138,10,1,13,0
-419152,2010-04-13,2009,Brabourne Stadium,Mumbai,Mumbai Indians,bat,Mumbai Indians,39 runs,,,Mumbai Indians,Delhi Capitals,183,4,144,7,1,39,0
-419153,2010-04-13,2009,"MA Chidambaram Stadium, Chepauk",Chennai,Kolkata Knight Riders,bat,Chennai Super Kings,9 wickets,,,Kolkata Knight Riders,Chennai Super Kings,139,8,143,1,0,0,9
-419154,2010-04-14,2009,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,bat,Royal Challengers Bengaluru,5 wickets,,,Rajasthan Royals,Royal Challengers Bengaluru,130,6,132,5,0,0,5
-419155,2010-04-15,2009,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Delhi Capitals,6 wickets,,,Chennai Super Kings,Delhi Capitals,112,9,113,4,0,0,6
-419156,2010-04-16,2009,Himachal Pradesh Cricket Association Stadium,Dharamsala,Deccan Chargers,field,Deccan Chargers,5 wickets,,,Punjab Kings,Deccan Chargers,174,3,178,5,0,0,5
-419157,2010-04-17,2009,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Mumbai Indians,57 runs,,,Mumbai Indians,Royal Challengers Bengaluru,191,4,134,9,1,57,0
-419158,2010-04-17,2009,Eden Gardens,Kolkata,Rajasthan Royals,bat,Kolkata Knight Riders,8 wickets,,,Rajasthan Royals,Kolkata Knight Riders,132,9,133,2,0,0,8
-419159,2010-04-18,2009,Himachal Pradesh Cricket Association Stadium,Dharamsala,Chennai Super Kings,field,Chennai Super Kings,6 wickets,,,Punjab Kings,Chennai Super Kings,192,3,195,4,0,0,6
-419160,2010-04-18,2009,Feroz Shah Kotla,Delhi,Deccan Chargers,bat,Deccan Chargers,11 runs,,,Deccan Chargers,Delhi Capitals,145,7,134,7,1,11,0
-419161,2010-04-19,2009,Eden Gardens,Kolkata,Mumbai Indians,bat,Kolkata Knight Riders,9 wickets,,,Mumbai Indians,Kolkata Knight Riders,133,8,135,1,0,0,9
-419162,2010-04-21,2009,Dr DY Patil Sports Academy,Mumbai,Mumbai Indians,bat,Mumbai Indians,35 runs,,,Mumbai Indians,Royal Challengers Bengaluru,184,5,149,9,1,35,0
-419163,2010-04-22,2009,Dr DY Patil Sports Academy,Mumbai,Chennai Super Kings,bat,Chennai Super Kings,38 runs,,,Chennai Super Kings,Deccan Chargers,142,7,104,10,1,38,0
-419164,2010-04-24,2009,Dr DY Patil Sports Academy,Mumbai,Deccan Chargers,bat,Royal Challengers Bengaluru,9 wickets,,,Deccan Chargers,Royal Challengers Bengaluru,82,10,86,1,0,0,9
-419165,2010-04-25,2009,Dr DY Patil Sports Academy,Mumbai,Chennai Super Kings,bat,Chennai Super Kings,22 runs,,,Chennai Super Kings,Mumbai Indians,168,5,146,9,1,22,0
+419106,2010-03-12,2010,Dr DY Patil Sports Academy,Mumbai,Deccan Chargers,field,Kolkata Knight Riders,11 runs,,,Kolkata Knight Riders,Deccan Chargers,161,4,150,7,1,11,0
+419107,2010-03-13,2010,Brabourne Stadium,Mumbai,Mumbai Indians,bat,Mumbai Indians,4 runs,,,Mumbai Indians,Rajasthan Royals,212,6,208,7,1,4,0
+419108,2010-03-13,2010,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Delhi Capitals,field,Delhi Capitals,5 wickets,,,Punjab Kings,Delhi Capitals,142,9,146,5,0,0,5
+419109,2010-03-14,2010,Eden Gardens,Kolkata,Kolkata Knight Riders,field,Kolkata Knight Riders,7 wickets,,,Royal Challengers Bengaluru,Kolkata Knight Riders,135,7,136,3,0,0,7
+419110,2010-03-14,2010,"MA Chidambaram Stadium, Chepauk",Chennai,Deccan Chargers,bat,Deccan Chargers,31 runs,,,Deccan Chargers,Chennai Super Kings,190,4,159,9,1,31,0
+419111,2010-03-15,2010,"Sardar Patel Stadium, Motera",Ahmedabad,Delhi Capitals,field,Delhi Capitals,6 wickets,,,Rajasthan Royals,Delhi Capitals,141,6,142,4,0,0,6
+419112,2010-03-16,2010,M Chinnaswamy Stadium,Bangalore,Punjab Kings,bat,Royal Challengers Bengaluru,8 wickets,,,Punjab Kings,Royal Challengers Bengaluru,203,3,204,2,0,0,8
+419113,2010-03-16,2010,Eden Gardens,Kolkata,Chennai Super Kings,bat,Chennai Super Kings,55 runs,,,Chennai Super Kings,Kolkata Knight Riders,164,3,109,10,1,55,0
+419114,2010-03-17,2010,Feroz Shah Kotla,Delhi,Delhi Capitals,field,Mumbai Indians,98 runs,,,Mumbai Indians,Delhi Capitals,218,7,120,9,1,98,0
+419115,2010-03-18,2010,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Royal Challengers Bengaluru,10 wickets,,,Rajasthan Royals,Royal Challengers Bengaluru,92,10,93,0,0,0,10
+419116,2010-03-19,2010,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Chennai Super Kings,5 wickets,,,Delhi Capitals,Chennai Super Kings,185,6,190,5,0,0,5
+419117,2010-03-19,2010,Barabati Stadium,Cuttack,Punjab Kings,field,Deccan Chargers,6 runs,,,Deccan Chargers,Punjab Kings,170,7,164,8,1,6,0
+419118,2010-03-20,2010,"Sardar Patel Stadium, Motera",Ahmedabad,Rajasthan Royals,bat,Rajasthan Royals,34 runs,,,Rajasthan Royals,Kolkata Knight Riders,168,7,134,5,1,34,0
+419119,2010-03-20,2010,Brabourne Stadium,Mumbai,Mumbai Indians,bat,Royal Challengers Bengaluru,7 wickets,,,Mumbai Indians,Royal Challengers Bengaluru,151,9,155,3,0,0,7
+419120,2010-03-21,2010,Barabati Stadium,Cuttack,Deccan Chargers,bat,Deccan Chargers,10 runs,,,Deccan Chargers,Delhi Capitals,171,6,161,9,1,10,0
+419122,2010-03-22,2010,Brabourne Stadium,Mumbai,Kolkata Knight Riders,bat,Mumbai Indians,7 wickets,,,Kolkata Knight Riders,Mumbai Indians,155,3,156,3,0,0,7
+419123,2010-03-23,2010,M Chinnaswamy Stadium,Bangalore,Chennai Super Kings,field,Royal Challengers Bengaluru,36 runs,,,Royal Challengers Bengaluru,Chennai Super Kings,171,5,135,7,1,36,0
+419124,2010-03-24,2010,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Punjab Kings,field,Rajasthan Royals,31 runs,,,Rajasthan Royals,Punjab Kings,183,5,152,10,1,31,0
+419125,2010-03-25,2010,"Brabourne Stadium, Mumbai",Mumbai,Mumbai Indians,field,Mumbai Indians,5 wickets,,,Chennai Super Kings,Mumbai Indians,180,2,181,5,0,0,5
+419128,2010-03-25,2010,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Delhi Capitals,17 runs,,,Delhi Capitals,Royal Challengers Bengaluru,183,4,166,9,1,17,0
+419126,2010-03-26,2010,"Sardar Patel Stadium, Motera",Ahmedabad,Deccan Chargers,bat,Rajasthan Royals,8 wickets,,,Deccan Chargers,Rajasthan Royals,148,9,151,2,0,0,8
+419127,2010-03-27,2010,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Kolkata Knight Riders,bat,Kolkata Knight Riders,39 runs,,,Kolkata Knight Riders,Punjab Kings,183,5,144,6,1,39,0
+419129,2010-03-28,2010,"Sardar Patel Stadium, Motera",Ahmedabad,Rajasthan Royals,bat,Rajasthan Royals,17 runs,,,Rajasthan Royals,Chennai Super Kings,177,8,160,6,1,17,0
+419130,2010-03-28,2010,Dr DY Patil Sports Academy,Mumbai,Deccan Chargers,field,Mumbai Indians,41 runs,,,Mumbai Indians,Deccan Chargers,172,7,131,10,1,41,0
+419131,2010-03-29,2010,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Delhi Capitals,40 runs,,,Delhi Capitals,Kolkata Knight Riders,177,4,137,9,1,40,0
+419132,2010-03-30,2010,Brabourne Stadium,Mumbai,Mumbai Indians,field,Mumbai Indians,4 wickets,,,Punjab Kings,Mumbai Indians,163,10,164,6,0,0,4
+419133,2010-03-31,2010,"MA Chidambaram Stadium, Chepauk",Chennai,Royal Challengers Bengaluru,bat,Chennai Super Kings,5 wickets,,,Royal Challengers Bengaluru,Chennai Super Kings,161,4,162,5,0,0,5
+419134,2010-03-31,2010,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Delhi Capitals,67 runs,,,Delhi Capitals,Rajasthan Royals,188,6,121,10,1,67,0
+419135,2010-04-01,2010,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Kolkata Knight Riders,24 runs,,,Kolkata Knight Riders,Deccan Chargers,181,6,157,5,1,24,0
+419136,2010-04-02,2010,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Punjab Kings,bat,Royal Challengers Bengaluru,6 wickets,,,Punjab Kings,Royal Challengers Bengaluru,181,5,184,4,0,0,6
+419137,2010-04-03,2010,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Chennai Super Kings,23 runs,,,Chennai Super Kings,Rajasthan Royals,246,5,223,5,1,23,0
+419138,2010-04-03,2010,Brabourne Stadium,Mumbai,Mumbai Indians,bat,Mumbai Indians,63 runs,,,Mumbai Indians,Deccan Chargers,178,5,115,10,1,63,0
+419139,2010-04-04,2010,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Punjab Kings,8 wickets,,,Kolkata Knight Riders,Punjab Kings,200,3,204,2,0,0,8
+419140,2010-04-04,2010,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Delhi Capitals,37 runs,,,Delhi Capitals,Royal Challengers Bengaluru,184,5,147,9,1,37,0
+419141,2010-04-05,2010,"Vidarbha Cricket Association Stadium, Jamtha",Nagpur,Rajasthan Royals,bat,Rajasthan Royals,2 runs,,,Rajasthan Royals,Deccan Chargers,159,10,157,10,1,2,0
+419142,2010-04-06,2010,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Chennai Super Kings,24 runs,,,Chennai Super Kings,Mumbai Indians,165,4,141,9,1,24,0
+419143,2010-04-07,2010,Sawai Mansingh Stadium,Jaipur,Punjab Kings,bat,Rajasthan Royals,9 wickets,,,Punjab Kings,Rajasthan Royals,153,6,157,1,0,0,9
+419144,2010-04-07,2010,Eden Gardens,Kolkata,Kolkata Knight Riders,bat,Kolkata Knight Riders,14 runs,,,Kolkata Knight Riders,Delhi Capitals,181,3,167,8,1,14,0
+419145,2010-04-08,2010,M Chinnaswamy Stadium,Bangalore,Deccan Chargers,field,Deccan Chargers,7 wickets,,,Royal Challengers Bengaluru,Deccan Chargers,184,6,186,3,0,0,7
+419146,2010-04-09,2010,"Punjab Cricket Association Stadium, Mohali",Chandigarh,Mumbai Indians,bat,Punjab Kings,6 wickets,,,Mumbai Indians,Punjab Kings,154,9,158,4,0,0,6
+419147,2010-04-10,2010,"Vidarbha Cricket Association Stadium, Jamtha",Nagpur,Chennai Super Kings,bat,Deccan Chargers,6 wickets,,,Chennai Super Kings,Deccan Chargers,138,8,139,4,0,0,6
+419148,2010-04-10,2010,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Royal Challengers Bengaluru,7 wickets,,,Kolkata Knight Riders,Royal Challengers Bengaluru,160,9,162,3,0,0,7
+419149,2010-04-11,2010,Feroz Shah Kotla,Delhi,Delhi Capitals,bat,Punjab Kings,7 wickets,,,Delhi Capitals,Punjab Kings,111,10,112,3,0,0,7
+419150,2010-04-11,2010,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,field,Mumbai Indians,37 runs,,,Mumbai Indians,Rajasthan Royals,174,5,137,8,1,37,0
+419151,2010-04-12,2010,"Vidarbha Cricket Association Stadium, Jamtha",Nagpur,Royal Challengers Bengaluru,field,Deccan Chargers,13 runs,,,Deccan Chargers,Royal Challengers Bengaluru,151,6,138,10,1,13,0
+419152,2010-04-13,2010,Brabourne Stadium,Mumbai,Mumbai Indians,bat,Mumbai Indians,39 runs,,,Mumbai Indians,Delhi Capitals,183,4,144,7,1,39,0
+419153,2010-04-13,2010,"MA Chidambaram Stadium, Chepauk",Chennai,Kolkata Knight Riders,bat,Chennai Super Kings,9 wickets,,,Kolkata Knight Riders,Chennai Super Kings,139,8,143,1,0,0,9
+419154,2010-04-14,2010,Sawai Mansingh Stadium,Jaipur,Rajasthan Royals,bat,Royal Challengers Bengaluru,5 wickets,,,Rajasthan Royals,Royal Challengers Bengaluru,130,6,132,5,0,0,5
+419155,2010-04-15,2010,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Delhi Capitals,6 wickets,,,Chennai Super Kings,Delhi Capitals,112,9,113,4,0,0,6
+419156,2010-04-16,2010,Himachal Pradesh Cricket Association Stadium,Dharamsala,Deccan Chargers,field,Deccan Chargers,5 wickets,,,Punjab Kings,Deccan Chargers,174,3,178,5,0,0,5
+419157,2010-04-17,2010,M Chinnaswamy Stadium,Bangalore,Royal Challengers Bengaluru,field,Mumbai Indians,57 runs,,,Mumbai Indians,Royal Challengers Bengaluru,191,4,134,9,1,57,0
+419158,2010-04-17,2010,Eden Gardens,Kolkata,Rajasthan Royals,bat,Kolkata Knight Riders,8 wickets,,,Rajasthan Royals,Kolkata Knight Riders,132,9,133,2,0,0,8
+419159,2010-04-18,2010,Himachal Pradesh Cricket Association Stadium,Dharamsala,Chennai Super Kings,field,Chennai Super Kings,6 wickets,,,Punjab Kings,Chennai Super Kings,192,3,195,4,0,0,6
+419160,2010-04-18,2010,Feroz Shah Kotla,Delhi,Deccan Chargers,bat,Deccan Chargers,11 runs,,,Deccan Chargers,Delhi Capitals,145,7,134,7,1,11,0
+419161,2010-04-19,2010,Eden Gardens,Kolkata,Mumbai Indians,bat,Kolkata Knight Riders,9 wickets,,,Mumbai Indians,Kolkata Knight Riders,133,8,135,1,0,0,9
+419162,2010-04-21,2010,Dr DY Patil Sports Academy,Mumbai,Mumbai Indians,bat,Mumbai Indians,35 runs,,,Mumbai Indians,Royal Challengers Bengaluru,184,5,149,9,1,35,0
+419163,2010-04-22,2010,Dr DY Patil Sports Academy,Mumbai,Chennai Super Kings,bat,Chennai Super Kings,38 runs,,,Chennai Super Kings,Deccan Chargers,142,7,104,10,1,38,0
+419164,2010-04-24,2010,Dr DY Patil Sports Academy,Mumbai,Deccan Chargers,bat,Royal Challengers Bengaluru,9 wickets,,,Deccan Chargers,Royal Challengers Bengaluru,82,10,86,1,0,0,9
+419165,2010-04-25,2010,Dr DY Patil Sports Academy,Mumbai,Chennai Super Kings,bat,Chennai Super Kings,22 runs,,,Chennai Super Kings,Mumbai Indians,168,5,146,9,1,22,0
 501198,2011-04-08,2011,"MA Chidambaram Stadium, Chepauk",Chennai,Chennai Super Kings,bat,Chennai Super Kings,2 runs,,,Chennai Super Kings,Kolkata Knight Riders,153,4,151,7,1,2,0
 501199,2011-04-09,2011,"Rajiv Gandhi International Stadium, Uppal",Hyderabad,Rajasthan Royals,field,Rajasthan Royals,8 wickets,,,Deccan Chargers,Rajasthan Royals,137,8,141,2,0,0,8
 501200,2011-04-09,2011,Nehru Stadium,Kochi,Kochi Tuskers Kerala,bat,Royal Challengers Bengaluru,6 wickets,,,Kochi Tuskers Kerala,Royal Challengers Bengaluru,161,5,162,4,0,0,6

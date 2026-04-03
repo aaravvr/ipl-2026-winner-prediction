@@ -113,13 +113,8 @@ def build_historical_matches(df: pd.DataFrame) -> pd.DataFrame:
     matches = matches[matches["result_type"].fillna("").str.lower().ne("no result")].copy()
     matches = matches[matches["winner"].notna()].copy()
     matches["date"] = pd.to_datetime(matches["date"])
-    matches["season"] = (
-        matches["season"]
-        .astype(str)
-        .str.extract(r"(\d{4})", expand=False)
-        .fillna(matches["date"].dt.year.astype(str))
-        .astype(int)
-    )
+    # Match date is more reliable than the raw season field for this dataset.
+    matches["season"] = matches["date"].dt.year.astype(int)
     matches["team_1_won"] = (matches["winner"] == matches["team_1"]).astype(int)
     matches["margin_runs"] = (matches["team_1_score"] - matches["team_2_score"]).where(matches["winner"] == matches["team_1"], 0)
     matches["margin_wickets"] = (10 - matches["team_2_wickets_lost"]).where(matches["winner"] == matches["team_2"], 0)
