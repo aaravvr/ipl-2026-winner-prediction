@@ -15,6 +15,7 @@ from ipl_predictor.config import (
     LAST_SIM_TABLE_PATH,
     MATCH_PLAYER_STRENGTHS_PATH,
     MODEL_PATH,
+    TEAM_PRIORS_2026_PATH,
     TEAM_PLAYER_STRENGTHS_PATH,
     TEAMS_2026_PATH,
     TITLE_ODDS_PATH,
@@ -23,6 +24,7 @@ from ipl_predictor.data import (
     load_fixtures,
     load_historical_matches,
     load_optional_match_player_strengths,
+    load_optional_team_priors,
     load_optional_team_player_strengths,
     load_teams,
 )
@@ -51,6 +53,9 @@ def main() -> None:
     latest_team_strengths = load_optional_team_player_strengths(TEAM_PLAYER_STRENGTHS_PATH)
     for team, strengths in latest_team_strengths.items():
         state["player_team_strengths"][team] = strengths
+    latest_team_priors = load_optional_team_priors(TEAM_PRIORS_2026_PATH)
+    for team, priors in latest_team_priors.items():
+        state["team_priors"][team] = priors
 
     odds, latest_table = simulate_tournament(
         model=model,

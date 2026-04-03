@@ -30,6 +30,9 @@ def build_training_frame(
     batting_totals: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     bowling_totals: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     elo_ratings: dict[str, float] = defaultdict(lambda: base_elo)
+    team_priors: dict[str, dict[str, float]] = defaultdict(
+        lambda: {"prior_rating": 0.0, "batting_bonus": 0.0, "bowling_bonus": 0.0}
+    )
     rows: list[dict] = []
 
     for match in matches.sort_values(["date", "season"]).itertuples(index=False):
@@ -92,6 +95,15 @@ def build_training_frame(
                 "team_2_player_bowling_strength": float(getattr(match, "team_2_bowling_strength", np.nan)),
                 "player_batting_strength_diff": float(getattr(match, "batting_strength_diff", np.nan)),
                 "player_bowling_strength_diff": float(getattr(match, "bowling_strength_diff", np.nan)),
+                "team_1_prior_rating": team_priors[team_1]["prior_rating"],
+                "team_2_prior_rating": team_priors[team_2]["prior_rating"],
+                "prior_rating_diff": team_priors[team_1]["prior_rating"] - team_priors[team_2]["prior_rating"],
+                "team_1_batting_bonus": team_priors[team_1]["batting_bonus"],
+                "team_2_batting_bonus": team_priors[team_2]["batting_bonus"],
+                "batting_bonus_diff": team_priors[team_1]["batting_bonus"] - team_priors[team_2]["batting_bonus"],
+                "team_1_bowling_bonus": team_priors[team_1]["bowling_bonus"],
+                "team_2_bowling_bonus": team_priors[team_2]["bowling_bonus"],
+                "bowling_bonus_diff": team_priors[team_1]["bowling_bonus"] - team_priors[team_2]["bowling_bonus"],
                 "target": 1 if winner == team_1 else 0,
             }
         )
@@ -150,6 +162,9 @@ def initialize_state(
     player_team_strengths: dict[str, dict[str, float]] = defaultdict(
         lambda: {"batting_strength": 35.0, "bowling_strength": 18.0}
     )
+    team_priors: dict[str, dict[str, float]] = defaultdict(
+        lambda: {"prior_rating": 0.0, "batting_bonus": 0.0, "bowling_bonus": 0.0}
+    )
 
     for match in matches.sort_values(["date", "season"]).itertuples(index=False):
         team_1 = match.team_1
@@ -206,6 +221,7 @@ def initialize_state(
         "bowling_totals": bowling_totals,
         "elo_ratings": elo_ratings,
         "player_team_strengths": player_team_strengths,
+        "team_priors": team_priors,
         "recent_window": recent_window,
         "elo_k_factor": elo_k_factor,
         "base_elo": base_elo,
@@ -239,6 +255,8 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
     team_2_expected = 1.0 - team_1_expected
     team_1_player_strengths = state["player_team_strengths"][team_1]
     team_2_player_strengths = state["player_team_strengths"][team_2]
+    team_1_priors = state["team_priors"][team_1]
+    team_2_priors = state["team_priors"][team_2]
 
     toss_winner = match_row.get("toss_winner", team_1)
     toss_decision = match_row.get("toss_decision", "field")
@@ -275,6 +293,15 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
                 "team_2_player_bowling_strength": team_2_player_strengths["bowling_strength"],
                 "player_batting_strength_diff": team_1_player_strengths["batting_strength"] - team_2_player_strengths["batting_strength"],
                 "player_bowling_strength_diff": team_1_player_strengths["bowling_strength"] - team_2_player_strengths["bowling_strength"],
+                "team_1_prior_rating": team_1_priors["prior_rating"],
+                "team_2_prior_rating": team_2_priors["prior_rating"],
+                "prior_rating_diff": team_1_priors["prior_rating"] - team_2_priors["prior_rating"],
+                "team_1_batting_bonus": team_1_priors["batting_bonus"],
+                "team_2_batting_bonus": team_2_priors["batting_bonus"],
+                "batting_bonus_diff": team_1_priors["batting_bonus"] - team_2_priors["batting_bonus"],
+                "team_1_bowling_bonus": team_1_priors["bowling_bonus"],
+                "team_2_bowling_bonus": team_2_priors["bowling_bonus"],
+                "bowling_bonus_diff": team_1_priors["bowling_bonus"] - team_2_priors["bowling_bonus"],
             }
         ]
     )
@@ -359,6 +386,17 @@ def prepare_simulation_state(initial_state: dict) -> dict:
                     "bowling_strength": values["bowling_strength"],
                 }
                 for team, values in initial_state["player_team_strengths"].items()
+            },
+        ),
+        "team_priors": defaultdict(
+            lambda: {"prior_rating": 0.0, "batting_bonus": 0.0, "bowling_bonus": 0.0},
+            {
+                team: {
+                    "prior_rating": values["prior_rating"],
+                    "batting_bonus": values["batting_bonus"],
+                    "bowling_bonus": values["bowling_bonus"],
+                }
+                for team, values in initial_state["team_priors"].items()
             },
         ),
         "recent_window": initial_state["recent_window"],

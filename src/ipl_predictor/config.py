@@ -11,6 +11,7 @@ TEAMS_2026_PATH = DATA_DIR / "teams_2026.csv"
 BALL_BY_BALL_SOURCE_PATH = ROOT_DIR.parent / "IPL.csv"
 MATCH_PLAYER_STRENGTHS_PATH = DATA_DIR / "match_player_strengths.csv"
 TEAM_PLAYER_STRENGTHS_PATH = DATA_DIR / "team_player_strengths_latest.csv"
+TEAM_PRIORS_2026_PATH = DATA_DIR / "team_priors_2026.csv"
 
 MODEL_PATH = ARTIFACTS_DIR / "match_winner_model.joblib"
 FEATURE_METADATA_PATH = ARTIFACTS_DIR / "feature_columns.joblib"
