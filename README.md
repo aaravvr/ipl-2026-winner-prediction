@@ -30,6 +30,7 @@ IPL/
 |-- prepare_ball_by_ball_data.py
 |-- prepare_fixture_schedule.py
 |-- prepare_player_strength_features.py
+|-- prepare_team_priors.py
 |-- prepare_team_squads.py
 |-- train.py
 |-- simulate_2026.py
@@ -119,6 +120,7 @@ python prepare_fixture_schedule.py --source C:\Users\aarav\Desktop\1774525332894
 python prepare_team_squads.py
 python prepare_ball_by_ball_data.py --source C:\Users\aarav\Desktop\IPL.csv
 python prepare_player_strength_features.py --source C:\Users\aarav\Desktop\IPL.csv
+python prepare_team_priors.py --source C:\Users\aarav\Desktop\IPL.csv
 python train.py
 python simulate_2026.py --n-simulations 5000
 ```

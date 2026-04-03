@@ -1,11 +1,11 @@
-team,prior_rating,batting_bonus,bowling_bonus,notes
-Chennai Super Kings,8,7,8,Strong continuity and reliable home profile
-Delhi Capitals,5,5,5,Balanced side with less proven top-end ceiling
-Gujarat Titans,7,7,7,Strong structure across phases
-Kolkata Knight Riders,8,8,7,High-upside batting core
-Lucknow Super Giants,7,7,7,Deep roster with multiple all-phase contributors
-Mumbai Indians,8,8,8,High-ceiling squad with proven pedigree
-Punjab Kings,6,7,5,Explosive batting but shakier bowling floor
-Rajasthan Royals,7,7,6,Top-end quality with solid overall balance
-Royal Challengers Bengaluru,6,7,5,Batting remains stronger than bowling base
-Sunrisers Hyderabad,7,8,6,Aggressive batting upside with decent bowling depth
+team,prior_rating,batting_bonus,bowling_bonus,captain,coach,venue,derived_batting_strength,derived_bowling_strength,notes
+Chennai Super Kings,5.0,7.0,2.0,Ruturaj Gaikwad,Stephen Fleming,M. A. Chidambaram Stadium,32.75,16.2,Auto-generated from official squads and historical IPL player performance
+Delhi Capitals,4.0,6.0,-1.0,Axar Patel,Hemang Badani,Arun Jaitley Stadium,30.779,12.194,Auto-generated from official squads and historical IPL player performance
+Gujarat Titans,3.0,5.0,0.0,Shubman Gill,Ashish Nehra,Narendra Modi Stadium,28.976,13.35,Auto-generated from official squads and historical IPL player performance
+Kolkata Knight Riders,5.0,7.0,2.0,Ajinkya Rahane,Abhishek Nayar,Eden Gardens,32.75,16.2,Auto-generated from official squads and historical IPL player performance
+Lucknow Super Giants,4.0,7.0,-1.0,Rishabh Pant,Justin Langer,BRSABV Ekana Cricket Stadium,31.377,12.733,Auto-generated from official squads and historical IPL player performance
+Mumbai Indians,4.0,6.0,2.0,Hardik Pandya,Mahela Jayawardene,Wankhede Stadium,30.171,16.8,Auto-generated from official squads and historical IPL player performance
+Punjab Kings,4.0,7.0,2.0,Shreyas Iyer,Ricky Ponting,New International Cricket Stadium,31.25,16.2,Auto-generated from official squads and historical IPL player performance
+Rajasthan Royals,4.0,5.0,0.0,Riyan Parag,Kumar Sangakkara,Sawai Mansingh Stadium,28.414,14.233,Auto-generated from official squads and historical IPL player performance
+Royal Challengers Bengaluru,5.0,7.0,2.0,Rajat Patidar,Andy Flower,M. Chinnaswamy Stadium,32.75,16.2,Auto-generated from official squads and historical IPL player performance
+Sunrisers Hyderabad,4.0,7.0,0.0,Pat Cummins,Daniel Vettori,Rajiv Gandhi Intl. Cricket Stadium,31.437,13.05,Auto-generated from official squads and historical IPL player performance
