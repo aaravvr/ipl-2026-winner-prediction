@@ -10,7 +10,7 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from ipl_predictor.config import FEATURE_METADATA_PATH, HISTORICAL_MATCHES_PATH, MODEL_PATH, TRAINING_METRICS_PATH
+from ipl_predictor.config import FEATURE_METADATA_PATH, HISTORICAL_MATCHES_PATH, MODEL_PATH, TRAINING_CV_METRICS_PATH, TRAINING_METRICS_PATH
 from ipl_predictor.config import MATCH_PLAYER_STRENGTHS_PATH
 from ipl_predictor.data import load_historical_matches, load_optional_match_player_strengths
 from ipl_predictor.features import build_training_frame
@@ -97,6 +97,56 @@ def time_based_split(training_frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.Dat
     return x_train, x_test, y_train, y_test
 
 
+def evaluate_time_series_cv(training_frame: pd.DataFrame, min_train_seasons: int = 5) -> pd.DataFrame:
+    ordered = training_frame.sort_values(["season", "date"] if "date" in training_frame.columns else ["season"]).reset_index(drop=True)
+    seasons = sorted(ordered["season"].unique())
+    rows: list[dict[str, float | int | str]] = []
+
+    for season in seasons:
+        prior_seasons = [value for value in seasons if value < season]
+        if len(prior_seasons) < min_train_seasons:
+            continue
+        train_frame = ordered[ordered["season"] < season]
+        test_frame = ordered[ordered["season"] == season]
+        if train_frame.empty or test_frame.empty:
+            continue
+
+        x_train = train_frame.drop(columns=["target"])
+        y_train = train_frame["target"]
+        x_test = test_frame.drop(columns=["target"])
+        y_test = test_frame["target"]
+
+        raw_train_rows = len(x_train)
+        x_train_augmented, y_train_augmented = augment_training_data(x_train, y_train)
+        model = build_model_pipeline()
+        model.fit(x_train_augmented, y_train_augmented)
+        metrics = evaluate_model(model, x_test, y_test)
+        rows.append(
+            {
+                "test_season": int(season),
+                "train_rows": raw_train_rows,
+                "augmented_train_rows": len(x_train_augmented),
+                "test_rows": len(x_test),
+                **metrics,
+            }
+        )
+
+    if not rows:
+        return pd.DataFrame(columns=["test_season", "train_rows", "augmented_train_rows", "test_rows", "accuracy", "roc_auc", "log_loss"])
+
+    fold_metrics = pd.DataFrame(rows)
+    summary = {
+        "test_season": "mean",
+        "train_rows": float(fold_metrics["train_rows"].mean()),
+        "augmented_train_rows": float(fold_metrics["augmented_train_rows"].mean()),
+        "test_rows": float(fold_metrics["test_rows"].mean()),
+        "accuracy": float(fold_metrics["accuracy"].mean()),
+        "roc_auc": float(fold_metrics["roc_auc"].mean()),
+        "log_loss": float(fold_metrics["log_loss"].mean()),
+    }
+    return pd.concat([fold_metrics, pd.DataFrame([summary])], ignore_index=True)
+
+
 def main() -> None:
     matches = load_historical_matches(HISTORICAL_MATCHES_PATH)
     match_player_strengths = load_optional_match_player_strengths(MATCH_PLAYER_STRENGTHS_PATH)
@@ -115,6 +165,7 @@ def main() -> None:
     model = build_model_pipeline()
     model.fit(x_train, y_train)
     metrics = evaluate_model(model, x_test, y_test)
+    cv_metrics = evaluate_time_series_cv(training_frame)
     save_model(model, MODEL_PATH, FEATURE_METADATA_PATH, x_train.columns.tolist())
     metrics_frame = pd.DataFrame(
         [
@@ -130,11 +181,13 @@ def main() -> None:
     )
     TRAINING_METRICS_PATH.parent.mkdir(parents=True, exist_ok=True)
     metrics_frame.to_csv(TRAINING_METRICS_PATH, index=False)
+    cv_metrics.to_csv(TRAINING_CV_METRICS_PATH, index=False)
 
     print("Training complete.")
     print(pd.Series(metrics).round(4).to_string())
     print(f"Saved model to: {MODEL_PATH}")
     print(f"Saved training metrics to: {TRAINING_METRICS_PATH}")
+    print(f"Saved time-series CV metrics to: {TRAINING_CV_METRICS_PATH}")
 
 
 if __name__ == "__main__":

@@ -33,24 +33,30 @@ def _initialize_table(teams: list[str]) -> pd.DataFrame:
 def _estimate_scores(features: pd.DataFrame, winner: str, team_1: str, team_2: str, rng: np.random.Generator) -> tuple[float, float]:
     row = features.iloc[0]
     venue_base = float(row["venue_avg_innings_score"])
+    league_score_baseline = 157.0
+    league_batting_strength = 33.0
+    league_bowling_strength = 17.0
+
     team_1_expected = (
-        0.45 * float(row["team_1_avg_runs_scored"])
-        + 0.25 * venue_base
-        + 0.20 * float(row["team_2_avg_runs_conceded"])
-        + 0.10 * float(row["team_1_player_batting_strength"]) * 3.0
-        - 0.08 * float(row["team_2_player_bowling_strength"]) * 2.0
+        venue_base
+        + 0.45 * (float(row["team_1_avg_runs_scored"]) - venue_base)
+        + 0.30 * (float(row["team_2_avg_runs_conceded"]) - venue_base)
+        + 1.8 * (float(row["team_1_player_batting_strength"]) - league_batting_strength)
+        - 1.8 * (float(row["team_2_player_bowling_strength"]) - league_bowling_strength)
+        + 14.0 * (float(row["team_1_expected_score"]) - 0.5)
     )
     team_2_expected = (
-        0.45 * float(row["team_2_avg_runs_scored"])
-        + 0.25 * venue_base
-        + 0.20 * float(row["team_1_avg_runs_conceded"])
-        + 0.10 * float(row["team_2_player_batting_strength"]) * 3.0
-        - 0.08 * float(row["team_1_player_bowling_strength"]) * 2.0
+        venue_base
+        + 0.45 * (float(row["team_2_avg_runs_scored"]) - venue_base)
+        + 0.30 * (float(row["team_1_avg_runs_conceded"]) - venue_base)
+        + 1.8 * (float(row["team_2_player_batting_strength"]) - league_batting_strength)
+        - 1.8 * (float(row["team_1_player_bowling_strength"]) - league_bowling_strength)
+        + 14.0 * (float(row["team_2_expected_score"]) - 0.5)
     )
     margin_bias = abs(float(row["team_1_expected_score"]) - 0.5)
     margin = max(4.0, 8.0 + 35.0 * margin_bias + rng.normal(0.0, 6.0))
-    team_1_score = max(110.0, team_1_expected + rng.normal(0.0, 10.0))
-    team_2_score = max(110.0, team_2_expected + rng.normal(0.0, 10.0))
+    team_1_score = min(260.0, max(110.0, team_1_expected + rng.normal(0.0, 9.0)))
+    team_2_score = min(260.0, max(110.0, team_2_expected + rng.normal(0.0, 9.0)))
     if winner == team_1 and team_1_score <= team_2_score:
         team_1_score = team_2_score + margin
     elif winner == team_2 and team_2_score <= team_1_score:
