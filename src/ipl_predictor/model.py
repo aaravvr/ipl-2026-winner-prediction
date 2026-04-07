@@ -9,6 +9,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
 
+PREDICTION_THRESHOLD = 0.48
+
+
 def build_model_pipeline() -> Pipeline:
     categorical_features = ["team_1", "team_2", "venue"]
     numeric_features = [
@@ -72,7 +75,7 @@ def build_model_pipeline() -> Pipeline:
 
 def evaluate_model(model: Pipeline, x_test, y_test) -> dict[str, float]:
     probabilities = model.predict_proba(x_test)[:, 1]
-    predictions = (probabilities >= 0.5).astype(int)
+    predictions = (probabilities >= PREDICTION_THRESHOLD).astype(int)
     return {
         "accuracy": accuracy_score(y_test, predictions),
         "roc_auc": roc_auc_score(y_test, probabilities) if len(set(y_test)) > 1 else float("nan"),
