@@ -30,9 +30,6 @@ def augment_training_data(x_train: pd.DataFrame, y_train: pd.Series) -> tuple[pd
         ("team_1_avg_runs_scored", "team_2_avg_runs_scored"),
         ("team_1_avg_runs_conceded", "team_2_avg_runs_conceded"),
         ("team_1_recent_margin", "team_2_recent_margin"),
-        ("team_1_h2h_win_rate", "team_2_h2h_win_rate"),
-        ("team_1_elo", "team_2_elo"),
-        ("team_1_expected_score", "team_2_expected_score"),
         ("team_1_player_batting_strength", "team_2_player_batting_strength"),
         ("team_1_player_bowling_strength", "team_2_player_bowling_strength"),
     ]
@@ -98,7 +95,9 @@ def time_based_split(training_frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.Dat
 
 
 def evaluate_time_series_cv(training_frame: pd.DataFrame, min_train_seasons: int = 5) -> pd.DataFrame:
-    ordered = training_frame.sort_values(["season", "date"] if "date" in training_frame.columns else ["season"]).reset_index(drop=True)
+    # build_training_frame returns rows in chronological match order, which is
+    # what matters for leakage-safe rolling season evaluation.
+    ordered = training_frame.reset_index(drop=True)
     seasons = sorted(ordered["season"].unique())
     rows: list[dict[str, float | int | str]] = []
 

@@ -13,7 +13,6 @@ from ipl_predictor.config import (
     FIXTURES_2026_PATH,
     HISTORICAL_MATCHES_PATH,
     LAST_SIM_TABLE_PATH,
-    MATCH_PLAYER_STRENGTHS_PATH,
     MODEL_PATH,
     TEAM_PRIORS_2026_PATH,
     TEAM_PLAYER_STRENGTHS_PATH,
@@ -23,7 +22,6 @@ from ipl_predictor.config import (
 from ipl_predictor.data import (
     load_fixtures,
     load_historical_matches,
-    load_optional_match_player_strengths,
     load_optional_team_priors,
     load_optional_team_player_strengths,
     load_teams,
@@ -44,9 +42,6 @@ def main() -> None:
 
     model = load_model(MODEL_PATH)
     historical_matches = load_historical_matches(HISTORICAL_MATCHES_PATH)
-    match_player_strengths = load_optional_match_player_strengths(MATCH_PLAYER_STRENGTHS_PATH)
-    if match_player_strengths is not None and "match_id" in historical_matches.columns:
-        historical_matches = historical_matches.merge(match_player_strengths, on="match_id", how="left")
     fixtures = load_fixtures(FIXTURES_2026_PATH)
     teams = load_teams(TEAMS_2026_PATH)
     state = initialize_state(historical_matches)

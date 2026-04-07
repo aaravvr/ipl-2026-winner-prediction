@@ -77,8 +77,10 @@ def _estimate_scores(
     team_2_score = np.clip(team_2_expected + total_bias + rng.normal(0.0, INNINGS_SCORE_STD), MIN_INNINGS_SCORE, MAX_INNINGS_SCORE)
     margin = _sample_margin(win_probability, rng)
     if winner == team_1 and team_1_score <= team_2_score:
+        team_2_score = min(team_2_score, MAX_INNINGS_SCORE - margin)
         team_1_score = team_2_score + margin
     elif winner == team_2 and team_2_score <= team_1_score:
+        team_1_score = min(team_1_score, MAX_INNINGS_SCORE - margin)
         team_2_score = team_1_score + margin
     team_1_score = float(np.clip(team_1_score, MIN_INNINGS_SCORE, MAX_INNINGS_SCORE))
     team_2_score = float(np.clip(team_2_score, MIN_INNINGS_SCORE, MAX_INNINGS_SCORE))
