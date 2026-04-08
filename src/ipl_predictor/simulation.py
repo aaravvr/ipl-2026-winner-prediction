@@ -150,6 +150,11 @@ def _simulate_match(model, match_row: pd.Series, state: dict, rng: np.random.Gen
     features = make_match_features(match_row, state)
     win_probability = float(model.predict_proba(features)[:, 1][0])
     winner = match_row["team_1"] if rng.random() < win_probability else match_row["team_2"]
+    batting_first_wins = rng.random() < float(features.iloc[0]["venue_batting_first_win_rate"])
+    if winner == match_row["team_1"]:
+        current_batted_first = "team_1" if batting_first_wins else "team_2"
+    else:
+        current_batted_first = "team_2" if batting_first_wins else "team_1"
     team_1_score, team_2_score = _estimate_scores(
         features,
         state,
@@ -163,15 +168,19 @@ def _simulate_match(model, match_row: pd.Series, state: dict, rng: np.random.Gen
     state["current_season"] = int(pd.to_datetime(match_row["date"]).year) if "date" in match_row and not pd.isna(match_row["date"]) else 2026
     state["current_team_1_score"] = team_1_score
     state["current_team_2_score"] = team_2_score
+    state["current_batted_first"] = current_batted_first
     update_state_after_match(match_row["team_1"], match_row["team_2"], winner, state)
     state["current_venue"] = None
     state["current_season"] = None
     state["current_team_1_score"] = None
     state["current_team_2_score"] = None
+    state["current_batted_first"] = None
     return winner, win_probability, team_1_score, team_2_score
 
 
 def _playoff_match(model, team_1: str, team_2: str, state: dict, rng: np.random.Generator, venue: str) -> str:
+    # Playoff rows intentionally omit date, so make_match_features falls back to
+    # the simulation season when building season-window features.
     row = pd.Series(
         {
             "team_1": team_1,

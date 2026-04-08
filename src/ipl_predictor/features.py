@@ -560,6 +560,22 @@ def update_state_after_match(team_1: str, team_2: str, winner: str, state: dict)
         state["venue_totals"][(team_1, venue)][1] += 1
         state["venue_totals"][(team_2, venue)][0] += team_2_won
         state["venue_totals"][(team_2, venue)][1] += 1
+        current_batted_first = state.get("current_batted_first")
+        if current_batted_first in {"team_1", "team_2"}:
+            team_1_batted_first = current_batted_first == "team_1"
+            batting_first_won = (team_1_batted_first and team_1_won) or (not team_1_batted_first and team_2_won)
+            state["venue_batting_first_totals"][venue][0] += int(batting_first_won)
+            state["venue_batting_first_totals"][venue][1] += 1
+            if team_1_batted_first:
+                state["team_batting_first_totals"][team_1][0] += team_1_won
+                state["team_batting_first_totals"][team_1][1] += 1
+                state["team_chasing_totals"][team_2][0] += team_2_won
+                state["team_chasing_totals"][team_2][1] += 1
+            else:
+                state["team_chasing_totals"][team_1][0] += team_1_won
+                state["team_chasing_totals"][team_1][1] += 1
+                state["team_batting_first_totals"][team_2][0] += team_2_won
+                state["team_batting_first_totals"][team_2][1] += 1
 
     team_1_elo = state["elo_ratings"][team_1]
     team_2_elo = state["elo_ratings"][team_2]
@@ -642,4 +658,5 @@ def prepare_simulation_state(initial_state: dict) -> dict:
         "current_season": None,
         "current_team_1_score": None,
         "current_team_2_score": None,
+        "current_batted_first": None,
     }

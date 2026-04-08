@@ -51,6 +51,8 @@ def build_model_pipeline(n_estimators: int = 150, learning_rate: float = 0.2, ca
         "chasing_win_rate_diff",
         "h2h_win_rate_diff",
         "elo_diff",
+        # Expected scores are derived from Elo and only used by the simulation
+        # score generator, so we intentionally keep them out of the classifier.
         "team_1_player_batting_strength",
         "team_2_player_batting_strength",
         "team_1_player_bowling_strength",

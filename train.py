@@ -114,15 +114,31 @@ def time_based_split(training_frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.Dat
     return x_train, x_test, y_train, y_test
 
 
-def calibration_split(x_train: pd.DataFrame, y_train: pd.Series) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+def calibration_split(
+    x_train: pd.DataFrame,
+    y_train: pd.Series,
+    calibration_fraction: float = 0.40,
+    min_calibration_matches: int = 24,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     train_frame = x_train.copy()
     train_frame["target"] = y_train.to_numpy()
     seasons = sorted(train_frame["season"].unique()) if "season" in train_frame.columns else []
     if len(seasons) > 1:
         calibration_season = seasons[-1]
-        fit_frame = train_frame[train_frame["season"] < calibration_season]
-        calibration_frame = train_frame[train_frame["season"] == calibration_season]
-        if not fit_frame.empty and len(calibration_frame["target"].unique()) > 1:
+        calibration_candidates = train_frame[train_frame["season"] == calibration_season]
+        calibration_size = max(min_calibration_matches, int(len(calibration_candidates) * calibration_fraction))
+        calibration_size = min(calibration_size, max(len(calibration_candidates) - 1, 0))
+        if calibration_size > 0:
+            calibration_frame = calibration_candidates.tail(calibration_size)
+            fit_frame = train_frame.drop(index=calibration_frame.index)
+        else:
+            fit_frame = train_frame
+            calibration_frame = train_frame.iloc[0:0]
+        if (
+            not fit_frame.empty
+            and not calibration_frame.empty
+            and len(calibration_frame["target"].unique()) > 1
+        ):
             return (
                 fit_frame.drop(columns=["target"]),
                 calibration_frame.drop(columns=["target"]),
