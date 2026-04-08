@@ -131,6 +131,48 @@ def death_bowling_rating(stats: dict[str, float]) -> float:
     return 45.0 * wickets_per_match + max(0.0, 13.0 - economy)
 
 
+def middle_batting_rating(stats: dict[str, float]) -> float:
+    balls = max(float(stats.get("middle_balls", 0.0)), 1.0)
+    runs = float(stats.get("middle_runs", 0.0))
+    if balls < 12.0:
+        return batting_rating(stats)
+    strike_rate = 100.0 * runs / balls
+    runs_per_innings = runs / max(float(stats.get("innings", 1.0)), 1.0)
+    return 0.16 * strike_rate + 0.55 * runs_per_innings
+
+
+def middle_bowling_rating(stats: dict[str, float]) -> float:
+    balls = max(float(stats.get("middle_balls", 0.0)), 1.0)
+    runs = float(stats.get("middle_runs", 0.0))
+    wickets = float(stats.get("middle_wickets", 0.0))
+    if balls < 12.0:
+        return bowling_rating(stats)
+    economy = 6.0 * runs / balls
+    wickets_per_match = wickets / max(float(stats.get("matches", 1.0)), 1.0)
+    return 40.0 * wickets_per_match + max(0.0, 10.5 - economy)
+
+
+def team_depth(
+    players: list[str],
+    player_stats: dict[str, dict[str, float]],
+    rating_fn,
+    default_strength: float,
+    top_n: int,
+) -> float:
+    ratings = []
+    for player in players:
+        stats = player_stats.get(player)
+        ratings.append(rating_fn(stats) if stats else default_strength)
+    if len(ratings) < 3:
+        return 0.5
+    ratings = sorted(ratings, reverse=True)[:top_n]
+    total = sum(max(rating, 0.0) for rating in ratings)
+    if total <= 0:
+        return 0.5
+    top_two_share = sum(max(rating, 0.0) for rating in ratings[:2]) / total
+    return 1.0 - top_two_share
+
+
 def team_strength(
     players: list[str],
     player_stats: dict[str, dict[str, float]],
@@ -198,6 +240,18 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
         .agg(runs=("runs_bowler", "sum"), balls=("valid_ball", "sum"), wickets=("is_bowler_wicket", "sum"))
         .reset_index()
     )
+    middle_updates = (
+        ball_by_ball[(ball_by_ball["over"] >= 6) & (ball_by_ball["over"] < 16)]
+        .groupby(["match_id", "batting_team", "batter"], dropna=False)
+        .agg(runs=("runs_batter", "sum"), balls=("valid_ball", "sum"))
+        .reset_index()
+    )
+    middle_bowling_updates = (
+        bowling_base[(bowling_base["over"] >= 6) & (bowling_base["over"] < 16)]
+        .groupby(["match_id", "bowling_team", "bowler"], dropna=False)
+        .agg(runs=("runs_bowler", "sum"), balls=("valid_ball", "sum"), wickets=("is_bowler_wicket", "sum"))
+        .reset_index()
+    )
 
     batting_updates_by_match = {
         match_id: frame for match_id, frame in batting_updates.groupby("match_id", sort=False)
@@ -211,6 +265,12 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
     death_bowling_updates_by_match = {
         match_id: frame for match_id, frame in death_bowling_updates.groupby("match_id", sort=False)
     }
+    middle_updates_by_match = {
+        match_id: frame for match_id, frame in middle_updates.groupby("match_id", sort=False)
+    }
+    middle_bowling_updates_by_match = {
+        match_id: frame for match_id, frame in middle_bowling_updates.groupby("match_id", sort=False)
+    }
     batters_by_match_team = {
         (match_id, team): sorted(frame["batter"].astype(str).unique().tolist())
         for (match_id, team), frame in batter_appearances.groupby(["match_id", "batting_team"], sort=False)
@@ -221,10 +281,21 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
     }
 
     batting_player_stats: dict[str, dict[str, float]] = defaultdict(
-        lambda: {"runs": 0.0, "balls": 0.0, "innings": 0.0, "powerplay_runs": 0.0, "powerplay_balls": 0.0}
+        lambda: {"runs": 0.0, "balls": 0.0, "innings": 0.0, "powerplay_runs": 0.0, "powerplay_balls": 0.0, "middle_runs": 0.0, "middle_balls": 0.0}
     )
     bowling_player_stats: dict[str, dict[str, float]] = defaultdict(
-        lambda: {"runs": 0.0, "balls": 0.0, "wickets": 0.0, "matches": 0.0, "death_runs": 0.0, "death_balls": 0.0, "death_wickets": 0.0}
+        lambda: {
+            "runs": 0.0,
+            "balls": 0.0,
+            "wickets": 0.0,
+            "matches": 0.0,
+            "death_runs": 0.0,
+            "death_balls": 0.0,
+            "death_wickets": 0.0,
+            "middle_runs": 0.0,
+            "middle_balls": 0.0,
+            "middle_wickets": 0.0,
+        }
     )
     batting_recent_form: dict[str, list[float]] = defaultdict(lambda: [])
     bowling_recent_form: dict[str, list[float]] = defaultdict(lambda: [])
@@ -305,6 +376,46 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
             top_n=4,
             recent_weight=0.0,
         )
+        team_1_middle_batting_strength = team_strength(
+            team_1_batters,
+            batting_player_stats,
+            defaultdict(lambda: []),
+            middle_batting_rating,
+            DEFAULT_BATTING_STRENGTH,
+            top_n=5,
+            recent_weight=0.0,
+        )
+        team_2_middle_batting_strength = team_strength(
+            team_2_batters,
+            batting_player_stats,
+            defaultdict(lambda: []),
+            middle_batting_rating,
+            DEFAULT_BATTING_STRENGTH,
+            top_n=5,
+            recent_weight=0.0,
+        )
+        team_1_middle_bowling_strength = team_strength(
+            team_1_bowlers,
+            bowling_player_stats,
+            defaultdict(lambda: []),
+            middle_bowling_rating,
+            DEFAULT_BOWLING_STRENGTH,
+            top_n=5,
+            recent_weight=0.0,
+        )
+        team_2_middle_bowling_strength = team_strength(
+            team_2_bowlers,
+            bowling_player_stats,
+            defaultdict(lambda: []),
+            middle_bowling_rating,
+            DEFAULT_BOWLING_STRENGTH,
+            top_n=5,
+            recent_weight=0.0,
+        )
+        team_1_batting_depth = team_depth(team_1_batters, batting_player_stats, batting_rating, DEFAULT_BATTING_STRENGTH, top_n=7)
+        team_2_batting_depth = team_depth(team_2_batters, batting_player_stats, batting_rating, DEFAULT_BATTING_STRENGTH, top_n=7)
+        team_1_bowling_depth = team_depth(team_1_bowlers, bowling_player_stats, bowling_rating, DEFAULT_BOWLING_STRENGTH, top_n=6)
+        team_2_bowling_depth = team_depth(team_2_bowlers, bowling_player_stats, bowling_rating, DEFAULT_BOWLING_STRENGTH, top_n=6)
 
         rows.append(
             {
@@ -317,10 +428,22 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
                 "team_2_powerplay_batting_strength": team_2_powerplay_batting_strength,
                 "team_1_death_bowling_strength": team_1_death_bowling_strength,
                 "team_2_death_bowling_strength": team_2_death_bowling_strength,
+                "team_1_middle_batting_strength": team_1_middle_batting_strength,
+                "team_2_middle_batting_strength": team_2_middle_batting_strength,
+                "team_1_middle_bowling_strength": team_1_middle_bowling_strength,
+                "team_2_middle_bowling_strength": team_2_middle_bowling_strength,
+                "team_1_batting_depth": team_1_batting_depth,
+                "team_2_batting_depth": team_2_batting_depth,
+                "team_1_bowling_depth": team_1_bowling_depth,
+                "team_2_bowling_depth": team_2_bowling_depth,
                 "batting_strength_diff": team_1_batting_strength - team_2_batting_strength,
                 "bowling_strength_diff": team_1_bowling_strength - team_2_bowling_strength,
                 "powerplay_batting_strength_diff": team_1_powerplay_batting_strength - team_2_powerplay_batting_strength,
                 "death_bowling_strength_diff": team_1_death_bowling_strength - team_2_death_bowling_strength,
+                "middle_batting_strength_diff": team_1_middle_batting_strength - team_2_middle_batting_strength,
+                "middle_bowling_strength_diff": team_1_middle_bowling_strength - team_2_middle_bowling_strength,
+                "batting_depth_diff": team_1_batting_depth - team_2_batting_depth,
+                "bowling_depth_diff": team_1_bowling_depth - team_2_bowling_depth,
             }
         )
 
@@ -329,12 +452,20 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
             "bowling_strength": team_1_bowling_strength,
             "powerplay_batting_strength": team_1_powerplay_batting_strength,
             "death_bowling_strength": team_1_death_bowling_strength,
+            "middle_batting_strength": team_1_middle_batting_strength,
+            "middle_bowling_strength": team_1_middle_bowling_strength,
+            "batting_depth": team_1_batting_depth,
+            "bowling_depth": team_1_bowling_depth,
         }
         latest_team_strengths[match.team_2] = {
             "batting_strength": team_2_batting_strength,
             "bowling_strength": team_2_bowling_strength,
             "powerplay_batting_strength": team_2_powerplay_batting_strength,
             "death_bowling_strength": team_2_death_bowling_strength,
+            "middle_batting_strength": team_2_middle_batting_strength,
+            "middle_bowling_strength": team_2_middle_bowling_strength,
+            "batting_depth": team_2_batting_depth,
+            "bowling_depth": team_2_bowling_depth,
         }
 
         for update in batting_updates_by_match.get(match.match_id, pd.DataFrame()).itertuples(index=False):
@@ -350,6 +481,10 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
             player = str(update.batter)
             batting_player_stats[player]["powerplay_runs"] += float(update.runs)
             batting_player_stats[player]["powerplay_balls"] += float(update.balls)
+        for update in middle_updates_by_match.get(match.match_id, pd.DataFrame()).itertuples(index=False):
+            player = str(update.batter)
+            batting_player_stats[player]["middle_runs"] += float(update.runs)
+            batting_player_stats[player]["middle_balls"] += float(update.balls)
 
         for update in bowling_updates_by_match.get(match.match_id, pd.DataFrame()).itertuples(index=False):
             player = str(update.bowler)
@@ -366,6 +501,11 @@ def build_match_player_strengths(ball_by_ball: pd.DataFrame, historical_matches:
             bowling_player_stats[player]["death_runs"] += float(update.runs)
             bowling_player_stats[player]["death_balls"] += float(update.balls)
             bowling_player_stats[player]["death_wickets"] += float(update.wickets)
+        for update in middle_bowling_updates_by_match.get(match.match_id, pd.DataFrame()).itertuples(index=False):
+            player = str(update.bowler)
+            bowling_player_stats[player]["middle_runs"] += float(update.runs)
+            bowling_player_stats[player]["middle_balls"] += float(update.balls)
+            bowling_player_stats[player]["middle_wickets"] += float(update.wickets)
 
     match_strengths = pd.DataFrame(rows).sort_values("match_id").reset_index(drop=True)
     latest_strengths = (

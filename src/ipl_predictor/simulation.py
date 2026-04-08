@@ -160,10 +160,12 @@ def _simulate_match(model, match_row: pd.Series, state: dict, rng: np.random.Gen
         rng,
     )
     state["current_venue"] = match_row["venue"]
+    state["current_season"] = int(pd.to_datetime(match_row["date"]).year) if "date" in match_row and not pd.isna(match_row["date"]) else 2026
     state["current_team_1_score"] = team_1_score
     state["current_team_2_score"] = team_2_score
     update_state_after_match(match_row["team_1"], match_row["team_2"], winner, state)
     state["current_venue"] = None
+    state["current_season"] = None
     state["current_team_1_score"] = None
     state["current_team_2_score"] = None
     return winner, win_probability, team_1_score, team_2_score

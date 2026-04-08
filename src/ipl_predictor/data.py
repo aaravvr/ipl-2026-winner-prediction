@@ -215,6 +215,10 @@ def load_optional_team_player_strengths(path: Path) -> dict[str, dict[str, float
             "bowling_strength": float(row.bowling_strength),
             "powerplay_batting_strength": float(getattr(row, "powerplay_batting_strength", row.batting_strength)),
             "death_bowling_strength": float(getattr(row, "death_bowling_strength", row.bowling_strength)),
+            "middle_batting_strength": float(getattr(row, "middle_batting_strength", row.batting_strength)),
+            "middle_bowling_strength": float(getattr(row, "middle_bowling_strength", row.bowling_strength)),
+            "batting_depth": float(getattr(row, "batting_depth", 0.5)),
+            "bowling_depth": float(getattr(row, "bowling_depth", 0.5)),
         }
         for row in df.itertuples(index=False)
     }

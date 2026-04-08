@@ -29,6 +29,12 @@ def _expected_score(rating_a: float, rating_b: float) -> float:
     return 1.0 / (1.0 + 10 ** ((rating_b - rating_a) / 400.0))
 
 
+def _season_window_rate(records: list[tuple[int, int]], current_season: int, seasons: int = 3) -> float:
+    lower_bound = current_season - seasons + 1
+    recent_records = [result for season, result in records if lower_bound <= season <= current_season]
+    return _safe_rate(sum(recent_records), len(recent_records))
+
+
 def _is_reliable_scorecard(match) -> bool:
     method = str(getattr(match, "method", "") or "").strip().upper()
     return method != "D/L"
@@ -48,6 +54,9 @@ def build_training_frame(
     venue_scoring: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     venue_team_batting_totals: dict[tuple[str, str], list[float]] = defaultdict(lambda: [0.0, 0.0])
     venue_batting_first_totals: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    team_batting_first_totals: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    team_chasing_totals: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    team_season_results: dict[str, list[tuple[int, int]]] = defaultdict(lambda: [])
     batting_totals: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     bowling_totals: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     elo_ratings: dict[str, float] = defaultdict(lambda: base_elo)
@@ -68,6 +77,12 @@ def build_training_frame(
         team_1_runs_conceded, team_1_bowling_matches = bowling_totals[team_1]
         team_2_runs_conceded, team_2_bowling_matches = bowling_totals[team_2]
         venue_batting_first_wins, venue_batting_first_matches = venue_batting_first_totals[match.venue]
+        team_1_batting_first_wins, team_1_batting_first_matches = team_batting_first_totals[team_1]
+        team_2_batting_first_wins, team_2_batting_first_matches = team_batting_first_totals[team_2]
+        team_1_chasing_wins, team_1_chasing_matches = team_chasing_totals[team_1]
+        team_2_chasing_wins, team_2_chasing_matches = team_chasing_totals[team_2]
+        team_1_recent_season_win_rate = _season_window_rate(team_season_results[team_1], int(match.season))
+        team_2_recent_season_win_rate = _season_window_rate(team_season_results[team_2], int(match.season))
 
         team_1_recent = list(team_results[team_1])
         team_2_recent = list(team_results[team_2])
@@ -102,6 +117,9 @@ def build_training_frame(
                 "team_1_overall_win_rate": _safe_rate(team_1_total_wins, team_1_total_matches),
                 "team_2_overall_win_rate": _safe_rate(team_2_total_wins, team_2_total_matches),
                 "overall_win_rate_diff": _safe_rate(team_1_total_wins, team_1_total_matches) - _safe_rate(team_2_total_wins, team_2_total_matches),
+                "team_1_recent_season_win_rate": team_1_recent_season_win_rate,
+                "team_2_recent_season_win_rate": team_2_recent_season_win_rate,
+                "recent_season_win_rate_diff": team_1_recent_season_win_rate - team_2_recent_season_win_rate,
                 "team_1_venue_win_rate": _safe_rate(team_1_venue_wins, team_1_venue_matches),
                 "team_2_venue_win_rate": _safe_rate(team_2_venue_wins, team_2_venue_matches),
                 "venue_win_rate_diff": _safe_rate(team_1_venue_wins, team_1_venue_matches) - _safe_rate(team_2_venue_wins, team_2_venue_matches),
@@ -120,9 +138,13 @@ def build_training_frame(
                 "recent_margin_diff": team_1_recent_margin - team_2_recent_margin,
                 "venue_avg_innings_score": _safe_mean(venue_runs_total, int(venue_innings), default=160.0),
                 "venue_batting_first_win_rate": _safe_rate(venue_batting_first_wins, venue_batting_first_matches),
-                "venue_chasing_win_rate": _safe_rate(venue_batting_first_matches - venue_batting_first_wins, venue_batting_first_matches),
-                "team_1_h2h_win_rate": _safe_rate(team_1_h2h_wins, h2h_total),
-                "team_2_h2h_win_rate": _safe_rate(team_2_h2h_wins, h2h_total),
+                "team_1_batting_first_win_rate": _safe_rate(team_1_batting_first_wins, team_1_batting_first_matches),
+                "team_2_batting_first_win_rate": _safe_rate(team_2_batting_first_wins, team_2_batting_first_matches),
+                "batting_first_win_rate_diff": _safe_rate(team_1_batting_first_wins, team_1_batting_first_matches)
+                - _safe_rate(team_2_batting_first_wins, team_2_batting_first_matches),
+                "team_1_chasing_win_rate": _safe_rate(team_1_chasing_wins, team_1_chasing_matches),
+                "team_2_chasing_win_rate": _safe_rate(team_2_chasing_wins, team_2_chasing_matches),
+                "chasing_win_rate_diff": _safe_rate(team_1_chasing_wins, team_1_chasing_matches) - _safe_rate(team_2_chasing_wins, team_2_chasing_matches),
                 "h2h_win_rate_diff": _safe_rate(team_1_h2h_wins, h2h_total) - _safe_rate(team_2_h2h_wins, h2h_total),
                 "team_1_elo": team_1_elo,
                 "team_2_elo": team_2_elo,
@@ -139,8 +161,20 @@ def build_training_frame(
                 "team_2_powerplay_batting_strength": float(getattr(match, "team_2_powerplay_batting_strength", np.nan)),
                 "team_1_death_bowling_strength": float(getattr(match, "team_1_death_bowling_strength", np.nan)),
                 "team_2_death_bowling_strength": float(getattr(match, "team_2_death_bowling_strength", np.nan)),
+                "team_1_middle_batting_strength": float(getattr(match, "team_1_middle_batting_strength", np.nan)),
+                "team_2_middle_batting_strength": float(getattr(match, "team_2_middle_batting_strength", np.nan)),
+                "team_1_middle_bowling_strength": float(getattr(match, "team_1_middle_bowling_strength", np.nan)),
+                "team_2_middle_bowling_strength": float(getattr(match, "team_2_middle_bowling_strength", np.nan)),
+                "team_1_batting_depth": float(getattr(match, "team_1_batting_depth", np.nan)),
+                "team_2_batting_depth": float(getattr(match, "team_2_batting_depth", np.nan)),
+                "team_1_bowling_depth": float(getattr(match, "team_1_bowling_depth", np.nan)),
+                "team_2_bowling_depth": float(getattr(match, "team_2_bowling_depth", np.nan)),
                 "powerplay_batting_strength_diff": float(getattr(match, "powerplay_batting_strength_diff", np.nan)),
                 "death_bowling_strength_diff": float(getattr(match, "death_bowling_strength_diff", np.nan)),
+                "middle_batting_strength_diff": float(getattr(match, "middle_batting_strength_diff", np.nan)),
+                "middle_bowling_strength_diff": float(getattr(match, "middle_bowling_strength_diff", np.nan)),
+                "batting_depth_diff": float(getattr(match, "batting_depth_diff", np.nan)),
+                "bowling_depth_diff": float(getattr(match, "bowling_depth_diff", np.nan)),
                 "target": 1 if winner == team_1 else 0,
             }
         )
@@ -185,8 +219,20 @@ def build_training_frame(
             batting_first_won = (team_1_batted_first and team_1_won) or (not team_1_batted_first and team_2_won)
             venue_batting_first_totals[match.venue][0] += int(batting_first_won)
             venue_batting_first_totals[match.venue][1] += 1
+            if team_1_batted_first:
+                team_batting_first_totals[team_1][0] += team_1_won
+                team_batting_first_totals[team_1][1] += 1
+                team_chasing_totals[team_2][0] += team_2_won
+                team_chasing_totals[team_2][1] += 1
+            else:
+                team_chasing_totals[team_1][0] += team_1_won
+                team_chasing_totals[team_1][1] += 1
+                team_batting_first_totals[team_2][0] += team_2_won
+                team_batting_first_totals[team_2][1] += 1
         team_results[team_1].append(team_1_won)
         team_results[team_2].append(team_2_won)
+        team_season_results[team_1].append((int(match.season), team_1_won))
+        team_season_results[team_2].append((int(match.season), team_2_won))
 
         if team_1 <= team_2:
             head_to_head[h2h_key][0] += team_1_won
@@ -215,6 +261,9 @@ def initialize_state(
     venue_scoring: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     venue_team_batting_totals: dict[tuple[str, str], list[float]] = defaultdict(lambda: [0.0, 0.0])
     venue_batting_first_totals: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    team_batting_first_totals: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    team_chasing_totals: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    team_season_results: dict[str, list[tuple[int, int]]] = defaultdict(lambda: [])
     batting_totals: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     bowling_totals: dict[str, list[float]] = defaultdict(lambda: [0.0, 0.0])
     reliable_scores: list[float] = []
@@ -225,6 +274,10 @@ def initialize_state(
             "bowling_strength": 18.0,
             "powerplay_batting_strength": 35.0,
             "death_bowling_strength": 18.0,
+            "middle_batting_strength": 35.0,
+            "middle_bowling_strength": 18.0,
+            "batting_depth": 0.5,
+            "bowling_depth": 0.5,
         }
     )
 
@@ -276,8 +329,20 @@ def initialize_state(
             batting_first_won = (team_1_batted_first and team_1_won) or (not team_1_batted_first and team_2_won)
             venue_batting_first_totals[match.venue][0] += int(batting_first_won)
             venue_batting_first_totals[match.venue][1] += 1
+            if team_1_batted_first:
+                team_batting_first_totals[team_1][0] += team_1_won
+                team_batting_first_totals[team_1][1] += 1
+                team_chasing_totals[team_2][0] += team_2_won
+                team_chasing_totals[team_2][1] += 1
+            else:
+                team_chasing_totals[team_1][0] += team_1_won
+                team_chasing_totals[team_1][1] += 1
+                team_batting_first_totals[team_2][0] += team_2_won
+                team_batting_first_totals[team_2][1] += 1
         team_results[team_1].append(team_1_won)
         team_results[team_2].append(team_2_won)
+        team_season_results[team_1].append((int(match.season), team_1_won))
+        team_season_results[team_2].append((int(match.season), team_2_won))
 
         key = tuple(sorted((team_1, team_2)))
         if team_1 <= team_2:
@@ -303,6 +368,9 @@ def initialize_state(
         "venue_scoring": venue_scoring,
         "venue_team_batting_totals": venue_team_batting_totals,
         "venue_batting_first_totals": venue_batting_first_totals,
+        "team_batting_first_totals": team_batting_first_totals,
+        "team_chasing_totals": team_chasing_totals,
+        "team_season_results": team_season_results,
         "batting_totals": batting_totals,
         "bowling_totals": bowling_totals,
         "elo_ratings": elo_ratings,
@@ -320,6 +388,7 @@ def initialize_state(
 def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -> pd.DataFrame:
     team_1 = match_row["team_1"]
     team_2 = match_row["team_2"]
+    match_season = int(pd.to_datetime(match_row["date"]).year) if "date" in match_row and not pd.isna(match_row["date"]) else season
     key = tuple(sorted((team_1, team_2)))
     h2h_wins = state["head_to_head"].setdefault(key, [0, 0])
     if team_1 <= team_2:
@@ -346,6 +415,12 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
     team_2_runs_conceded, team_2_bowling_matches = state["bowling_totals"][team_2]
     venue_runs_total, venue_innings = state["venue_scoring"][match_row["venue"]]
     venue_batting_first_wins, venue_batting_first_matches = state["venue_batting_first_totals"][match_row["venue"]]
+    team_1_batting_first_wins, team_1_batting_first_matches = state["team_batting_first_totals"][team_1]
+    team_2_batting_first_wins, team_2_batting_first_matches = state["team_batting_first_totals"][team_2]
+    team_1_chasing_wins, team_1_chasing_matches = state["team_chasing_totals"][team_1]
+    team_2_chasing_wins, team_2_chasing_matches = state["team_chasing_totals"][team_2]
+    team_1_recent_season_win_rate = _season_window_rate(state["team_season_results"][team_1], match_season)
+    team_2_recent_season_win_rate = _season_window_rate(state["team_season_results"][team_2], match_season)
     team_1_elo = state["elo_ratings"][team_1]
     team_2_elo = state["elo_ratings"][team_2]
     team_1_expected = _expected_score(team_1_elo, team_2_elo)
@@ -355,7 +430,7 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
     return pd.DataFrame(
         [
             {
-                "season": season,
+                "season": match_season,
                 "team_1": team_1,
                 "team_2": team_2,
                 "venue": match_row["venue"],
@@ -365,6 +440,9 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
                 "team_1_overall_win_rate": _safe_rate(team_1_total_wins, team_1_total_matches),
                 "team_2_overall_win_rate": _safe_rate(team_2_total_wins, team_2_total_matches),
                 "overall_win_rate_diff": _safe_rate(team_1_total_wins, team_1_total_matches) - _safe_rate(team_2_total_wins, team_2_total_matches),
+                "team_1_recent_season_win_rate": team_1_recent_season_win_rate,
+                "team_2_recent_season_win_rate": team_2_recent_season_win_rate,
+                "recent_season_win_rate_diff": team_1_recent_season_win_rate - team_2_recent_season_win_rate,
                 "team_1_venue_win_rate": _safe_rate(team_1_venue_wins, team_1_venue_matches),
                 "team_2_venue_win_rate": _safe_rate(team_2_venue_wins, team_2_venue_matches),
                 "venue_win_rate_diff": _safe_rate(team_1_venue_wins, team_1_venue_matches) - _safe_rate(team_2_venue_wins, team_2_venue_matches),
@@ -383,9 +461,13 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
                 "recent_margin_diff": team_1_recent_margin - team_2_recent_margin,
                 "venue_avg_innings_score": _safe_mean(venue_runs_total, int(venue_innings), default=160.0),
                 "venue_batting_first_win_rate": _safe_rate(venue_batting_first_wins, venue_batting_first_matches),
-                "venue_chasing_win_rate": _safe_rate(venue_batting_first_matches - venue_batting_first_wins, venue_batting_first_matches),
-                "team_1_h2h_win_rate": _safe_rate(team_1_h2h_wins, h2h_total),
-                "team_2_h2h_win_rate": _safe_rate(team_2_h2h_wins, h2h_total),
+                "team_1_batting_first_win_rate": _safe_rate(team_1_batting_first_wins, team_1_batting_first_matches),
+                "team_2_batting_first_win_rate": _safe_rate(team_2_batting_first_wins, team_2_batting_first_matches),
+                "batting_first_win_rate_diff": _safe_rate(team_1_batting_first_wins, team_1_batting_first_matches)
+                - _safe_rate(team_2_batting_first_wins, team_2_batting_first_matches),
+                "team_1_chasing_win_rate": _safe_rate(team_1_chasing_wins, team_1_chasing_matches),
+                "team_2_chasing_win_rate": _safe_rate(team_2_chasing_wins, team_2_chasing_matches),
+                "chasing_win_rate_diff": _safe_rate(team_1_chasing_wins, team_1_chasing_matches) - _safe_rate(team_2_chasing_wins, team_2_chasing_matches),
                 "h2h_win_rate_diff": _safe_rate(team_1_h2h_wins, h2h_total) - _safe_rate(team_2_h2h_wins, h2h_total),
                 "team_1_elo": team_1_elo,
                 "team_2_elo": team_2_elo,
@@ -402,8 +484,20 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
                 "team_2_powerplay_batting_strength": team_2_player_strengths["powerplay_batting_strength"],
                 "team_1_death_bowling_strength": team_1_player_strengths["death_bowling_strength"],
                 "team_2_death_bowling_strength": team_2_player_strengths["death_bowling_strength"],
+                "team_1_middle_batting_strength": team_1_player_strengths["middle_batting_strength"],
+                "team_2_middle_batting_strength": team_2_player_strengths["middle_batting_strength"],
+                "team_1_middle_bowling_strength": team_1_player_strengths["middle_bowling_strength"],
+                "team_2_middle_bowling_strength": team_2_player_strengths["middle_bowling_strength"],
+                "team_1_batting_depth": team_1_player_strengths["batting_depth"],
+                "team_2_batting_depth": team_2_player_strengths["batting_depth"],
+                "team_1_bowling_depth": team_1_player_strengths["bowling_depth"],
+                "team_2_bowling_depth": team_2_player_strengths["bowling_depth"],
                 "powerplay_batting_strength_diff": team_1_player_strengths["powerplay_batting_strength"] - team_2_player_strengths["powerplay_batting_strength"],
                 "death_bowling_strength_diff": team_1_player_strengths["death_bowling_strength"] - team_2_player_strengths["death_bowling_strength"],
+                "middle_batting_strength_diff": team_1_player_strengths["middle_batting_strength"] - team_2_player_strengths["middle_batting_strength"],
+                "middle_bowling_strength_diff": team_1_player_strengths["middle_bowling_strength"] - team_2_player_strengths["middle_bowling_strength"],
+                "batting_depth_diff": team_1_player_strengths["batting_depth"] - team_2_player_strengths["batting_depth"],
+                "bowling_depth_diff": team_1_player_strengths["bowling_depth"] - team_2_player_strengths["bowling_depth"],
             }
         ]
     )
@@ -447,6 +541,9 @@ def update_state_after_match(team_1: str, team_2: str, winner: str, state: dict)
         margin = team_1_score - team_2_score
         state["team_margins"][team_1].append(margin)
         state["team_margins"][team_2].append(-margin)
+    current_season = int(state.get("current_season", 2026))
+    state["team_season_results"][team_1].append((current_season, team_1_won))
+    state["team_season_results"][team_2].append((current_season, team_2_won))
 
     key = tuple(sorted((team_1, team_2)))
     state["head_to_head"].setdefault(key, [0, 0])
@@ -500,6 +597,18 @@ def prepare_simulation_state(initial_state: dict) -> dict:
             lambda: [0, 0],
             {venue: value[:] for venue, value in initial_state["venue_batting_first_totals"].items()},
         ),
+        "team_batting_first_totals": defaultdict(
+            lambda: [0, 0],
+            {team: value[:] for team, value in initial_state["team_batting_first_totals"].items()},
+        ),
+        "team_chasing_totals": defaultdict(
+            lambda: [0, 0],
+            {team: value[:] for team, value in initial_state["team_chasing_totals"].items()},
+        ),
+        "team_season_results": defaultdict(
+            lambda: [],
+            {team: value[:] for team, value in initial_state["team_season_results"].items()},
+        ),
         "batting_totals": defaultdict(
             lambda: [0.0, 0.0],
             {team: value[:] for team, value in initial_state["batting_totals"].items()},
@@ -518,6 +627,10 @@ def prepare_simulation_state(initial_state: dict) -> dict:
                 "bowling_strength": 18.0,
                 "powerplay_batting_strength": 35.0,
                 "death_bowling_strength": 18.0,
+                "middle_batting_strength": 35.0,
+                "middle_bowling_strength": 18.0,
+                "batting_depth": 0.5,
+                "bowling_depth": 0.5,
             },
             {team: values.copy() for team, values in initial_state["player_team_strengths"].items()},
         ),
@@ -526,6 +639,7 @@ def prepare_simulation_state(initial_state: dict) -> dict:
         "elo_k_factor": initial_state["elo_k_factor"],
         "base_elo": initial_state["base_elo"],
         "current_venue": None,
+        "current_season": None,
         "current_team_1_score": None,
         "current_team_2_score": None,
     }

@@ -55,6 +55,8 @@ def main() -> None:
         strengths["bowling_strength"] += priors["bowling_bonus"] + 0.25 * priors["prior_rating"]
         strengths["powerplay_batting_strength"] += priors["batting_bonus"] + 0.5 * priors["prior_rating"]
         strengths["death_bowling_strength"] += priors["bowling_bonus"] + 0.25 * priors["prior_rating"]
+        strengths["middle_batting_strength"] += priors["batting_bonus"] + 0.5 * priors["prior_rating"]
+        strengths["middle_bowling_strength"] += priors["bowling_bonus"] + 0.25 * priors["prior_rating"]
         state["player_team_strengths"][team] = strengths
 
     odds, latest_table = simulate_tournament(

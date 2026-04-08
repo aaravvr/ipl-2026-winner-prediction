@@ -4,6 +4,7 @@ import joblib
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.frozen import FrozenEstimator
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
 from sklearn.pipeline import Pipeline
@@ -13,7 +14,7 @@ from sklearn.preprocessing import OneHotEncoder
 PREDICTION_THRESHOLD = 0.50
 
 
-def build_model_pipeline() -> Pipeline:
+def build_model_pipeline(n_estimators: int = 150, learning_rate: float = 0.2, calibrated: bool = False) -> Pipeline:
     categorical_features = ["team_1", "team_2", "venue"]
     numeric_features = [
         "team_1_recent_win_rate",
@@ -22,6 +23,9 @@ def build_model_pipeline() -> Pipeline:
         "team_1_overall_win_rate",
         "team_2_overall_win_rate",
         "overall_win_rate_diff",
+        "team_1_recent_season_win_rate",
+        "team_2_recent_season_win_rate",
+        "recent_season_win_rate_diff",
         "team_1_venue_win_rate",
         "team_2_venue_win_rate",
         "venue_win_rate_diff",
@@ -39,7 +43,12 @@ def build_model_pipeline() -> Pipeline:
         "recent_margin_diff",
         "venue_avg_innings_score",
         "venue_batting_first_win_rate",
-        "venue_chasing_win_rate",
+        "team_1_batting_first_win_rate",
+        "team_2_batting_first_win_rate",
+        "batting_first_win_rate_diff",
+        "team_1_chasing_win_rate",
+        "team_2_chasing_win_rate",
+        "chasing_win_rate_diff",
         "h2h_win_rate_diff",
         "elo_diff",
         "team_1_player_batting_strength",
@@ -52,8 +61,20 @@ def build_model_pipeline() -> Pipeline:
         "team_2_powerplay_batting_strength",
         "team_1_death_bowling_strength",
         "team_2_death_bowling_strength",
+        "team_1_middle_batting_strength",
+        "team_2_middle_batting_strength",
+        "team_1_middle_bowling_strength",
+        "team_2_middle_bowling_strength",
+        "team_1_batting_depth",
+        "team_2_batting_depth",
+        "team_1_bowling_depth",
+        "team_2_bowling_depth",
         "powerplay_batting_strength_diff",
         "death_bowling_strength_diff",
+        "middle_batting_strength_diff",
+        "middle_bowling_strength_diff",
+        "batting_depth_diff",
+        "bowling_depth_diff",
     ]
 
     preprocessor = ColumnTransformer(
@@ -77,13 +98,19 @@ def build_model_pipeline() -> Pipeline:
     )
 
     base_model = AdaBoostClassifier(
-        n_estimators=150,
-        learning_rate=0.2,
+        n_estimators=n_estimators,
+        learning_rate=learning_rate,
         random_state=42,
     )
-    model = CalibratedClassifierCV(base_model, method="isotonic", cv=3)
+    model = CalibratedClassifierCV(base_model, method="isotonic", cv=3) if calibrated else base_model
 
     return Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
+
+
+def build_prefit_calibrated_model(fitted_model, x_calibration, y_calibration, method: str = "sigmoid"):
+    model = CalibratedClassifierCV(FrozenEstimator(fitted_model), method=method)
+    model.fit(x_calibration, y_calibration)
+    return model
 
 
 def evaluate_model(model: Pipeline, x_test, y_test) -> dict[str, float]:
