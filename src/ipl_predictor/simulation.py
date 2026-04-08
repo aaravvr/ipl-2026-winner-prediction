@@ -45,8 +45,25 @@ def _sample_margin(win_probability: float, rng: np.random.Generator) -> float:
     return float(np.clip(sampled, 1.0, 120.0))
 
 
+def _score_context(state: dict) -> tuple[float, float]:
+    context = state.get("score_context", {})
+    baseline = float(context.get("league_score_baseline", LEAGUE_SCORE_BASELINE))
+    innings_std = float(context.get("innings_score_std", INNINGS_SCORE_STD))
+    return baseline, float(np.clip(innings_std, 12.0, 28.0))
+
+
+def _strength_context(state: dict) -> tuple[float, float]:
+    strengths = list(state["player_team_strengths"].values())
+    if not strengths:
+        return LEAGUE_BATTING_STRENGTH, LEAGUE_BOWLING_STRENGTH
+    batting = np.mean([float(value.get("batting_strength", LEAGUE_BATTING_STRENGTH)) for value in strengths])
+    bowling = np.mean([float(value.get("bowling_strength", LEAGUE_BOWLING_STRENGTH)) for value in strengths])
+    return float(batting), float(bowling)
+
+
 def _estimate_scores(
     features: pd.DataFrame,
+    state: dict,
     winner: str,
     team_1: str,
     team_2: str,
@@ -55,26 +72,28 @@ def _estimate_scores(
 ) -> tuple[float, float]:
     row = features.iloc[0]
     venue_base = float(row["venue_avg_innings_score"])
+    league_score_baseline, innings_score_std = _score_context(state)
+    league_batting_strength, league_bowling_strength = _strength_context(state)
 
     team_1_expected = (
         venue_base
         + 0.45 * (float(row["team_1_avg_runs_scored"]) - venue_base)
         + 0.30 * (float(row["team_2_avg_runs_conceded"]) - venue_base)
-        + 1.8 * (float(row["team_1_player_batting_strength"]) - LEAGUE_BATTING_STRENGTH)
-        - 1.8 * (float(row["team_2_player_bowling_strength"]) - LEAGUE_BOWLING_STRENGTH)
+        + 1.8 * (float(row["team_1_player_batting_strength"]) - league_batting_strength)
+        - 1.8 * (float(row["team_2_player_bowling_strength"]) - league_bowling_strength)
         + 14.0 * (float(row["team_1_expected_score"]) - 0.5)
     )
     team_2_expected = (
         venue_base
         + 0.45 * (float(row["team_2_avg_runs_scored"]) - venue_base)
         + 0.30 * (float(row["team_1_avg_runs_conceded"]) - venue_base)
-        + 1.8 * (float(row["team_2_player_batting_strength"]) - LEAGUE_BATTING_STRENGTH)
-        - 1.8 * (float(row["team_1_player_bowling_strength"]) - LEAGUE_BOWLING_STRENGTH)
+        + 1.8 * (float(row["team_2_player_batting_strength"]) - league_batting_strength)
+        - 1.8 * (float(row["team_1_player_bowling_strength"]) - league_bowling_strength)
         + 14.0 * (float(row["team_2_expected_score"]) - 0.5)
     )
-    total_bias = 0.35 * ((team_1_expected + team_2_expected) / 2.0 - LEAGUE_SCORE_BASELINE)
-    team_1_score = np.clip(team_1_expected + total_bias + rng.normal(0.0, INNINGS_SCORE_STD), MIN_INNINGS_SCORE, MAX_INNINGS_SCORE)
-    team_2_score = np.clip(team_2_expected + total_bias + rng.normal(0.0, INNINGS_SCORE_STD), MIN_INNINGS_SCORE, MAX_INNINGS_SCORE)
+    total_bias = 0.35 * ((team_1_expected + team_2_expected) / 2.0 - league_score_baseline)
+    team_1_score = np.clip(team_1_expected + total_bias + rng.normal(0.0, innings_score_std), MIN_INNINGS_SCORE, MAX_INNINGS_SCORE)
+    team_2_score = np.clip(team_2_expected + total_bias + rng.normal(0.0, innings_score_std), MIN_INNINGS_SCORE, MAX_INNINGS_SCORE)
     margin = _sample_margin(win_probability, rng)
     if winner == team_1 and team_1_score <= team_2_score:
         team_2_score = min(team_2_score, MAX_INNINGS_SCORE - margin)
@@ -133,6 +152,7 @@ def _simulate_match(model, match_row: pd.Series, state: dict, rng: np.random.Gen
     winner = match_row["team_1"] if rng.random() < win_probability else match_row["team_2"]
     team_1_score, team_2_score = _estimate_scores(
         features,
+        state,
         winner,
         match_row["team_1"],
         match_row["team_2"],

@@ -50,12 +50,12 @@ def main() -> None:
         state["player_team_strengths"][team] = strengths
     latest_team_priors = load_optional_team_priors(TEAM_PRIORS_2026_PATH)
     for team, priors in latest_team_priors.items():
-        batting_strength = state["player_team_strengths"][team]["batting_strength"]
-        bowling_strength = state["player_team_strengths"][team]["bowling_strength"]
-        state["player_team_strengths"][team] = {
-            "batting_strength": batting_strength + priors["batting_bonus"] + 0.5 * priors["prior_rating"],
-            "bowling_strength": bowling_strength + priors["bowling_bonus"] + 0.25 * priors["prior_rating"],
-        }
+        strengths = state["player_team_strengths"][team].copy()
+        strengths["batting_strength"] += priors["batting_bonus"] + 0.5 * priors["prior_rating"]
+        strengths["bowling_strength"] += priors["bowling_bonus"] + 0.25 * priors["prior_rating"]
+        strengths["powerplay_batting_strength"] += priors["batting_bonus"] + 0.5 * priors["prior_rating"]
+        strengths["death_bowling_strength"] += priors["bowling_bonus"] + 0.25 * priors["prior_rating"]
+        state["player_team_strengths"][team] = strengths
 
     odds, latest_table = simulate_tournament(
         model=model,

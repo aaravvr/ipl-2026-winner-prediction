@@ -28,10 +28,13 @@ def augment_training_data(x_train: pd.DataFrame, y_train: pd.Series) -> tuple[pd
         ("team_1_overall_win_rate", "team_2_overall_win_rate"),
         ("team_1_venue_win_rate", "team_2_venue_win_rate"),
         ("team_1_avg_runs_scored", "team_2_avg_runs_scored"),
+        ("team_1_venue_avg_runs_scored", "team_2_venue_avg_runs_scored"),
         ("team_1_avg_runs_conceded", "team_2_avg_runs_conceded"),
         ("team_1_recent_margin", "team_2_recent_margin"),
         ("team_1_player_batting_strength", "team_2_player_batting_strength"),
         ("team_1_player_bowling_strength", "team_2_player_bowling_strength"),
+        ("team_1_powerplay_batting_strength", "team_2_powerplay_batting_strength"),
+        ("team_1_death_bowling_strength", "team_2_death_bowling_strength"),
     ]
     for left, right in swap_pairs:
         if left in train_frame.columns and right in train_frame.columns:
@@ -43,12 +46,15 @@ def augment_training_data(x_train: pd.DataFrame, y_train: pd.Series) -> tuple[pd
         "overall_win_rate_diff",
         "venue_win_rate_diff",
         "avg_runs_scored_diff",
+        "venue_avg_runs_scored_diff",
         "avg_runs_conceded_diff",
         "recent_margin_diff",
         "h2h_win_rate_diff",
         "elo_diff",
         "player_batting_strength_diff",
         "player_bowling_strength_diff",
+        "powerplay_batting_strength_diff",
+        "death_bowling_strength_diff",
     ]
     for column in invert_columns:
         if column in train_frame.columns:

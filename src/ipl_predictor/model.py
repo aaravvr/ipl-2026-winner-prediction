@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import joblib
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.impute import SimpleImputer
@@ -9,7 +10,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
 
-PREDICTION_THRESHOLD = 0.48
+PREDICTION_THRESHOLD = 0.50
 
 
 def build_model_pipeline() -> Pipeline:
@@ -27,6 +28,9 @@ def build_model_pipeline() -> Pipeline:
         "team_1_avg_runs_scored",
         "team_2_avg_runs_scored",
         "avg_runs_scored_diff",
+        "team_1_venue_avg_runs_scored",
+        "team_2_venue_avg_runs_scored",
+        "venue_avg_runs_scored_diff",
         "team_1_avg_runs_conceded",
         "team_2_avg_runs_conceded",
         "avg_runs_conceded_diff",
@@ -34,6 +38,8 @@ def build_model_pipeline() -> Pipeline:
         "team_2_recent_margin",
         "recent_margin_diff",
         "venue_avg_innings_score",
+        "venue_batting_first_win_rate",
+        "venue_chasing_win_rate",
         "h2h_win_rate_diff",
         "elo_diff",
         "team_1_player_batting_strength",
@@ -42,6 +48,12 @@ def build_model_pipeline() -> Pipeline:
         "team_2_player_bowling_strength",
         "player_batting_strength_diff",
         "player_bowling_strength_diff",
+        "team_1_powerplay_batting_strength",
+        "team_2_powerplay_batting_strength",
+        "team_1_death_bowling_strength",
+        "team_2_death_bowling_strength",
+        "powerplay_batting_strength_diff",
+        "death_bowling_strength_diff",
     ]
 
     preprocessor = ColumnTransformer(
@@ -64,11 +76,12 @@ def build_model_pipeline() -> Pipeline:
         ]
     )
 
-    model = AdaBoostClassifier(
+    base_model = AdaBoostClassifier(
         n_estimators=150,
         learning_rate=0.2,
         random_state=42,
     )
+    model = CalibratedClassifierCV(base_model, method="isotonic", cv=3)
 
     return Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
 
