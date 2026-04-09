@@ -15,6 +15,11 @@ PREDICTION_THRESHOLD = 0.50
 
 
 def build_model_pipeline(n_estimators: int = 150, learning_rate: float = 0.2, calibrated: bool = False) -> Pipeline:
+    if calibrated:
+        raise ValueError(
+            "Inline calibration is deprecated. Fit the base pipeline first and use "
+            "build_prefit_calibrated_model(...) on a held-out calibration slice."
+        )
     categorical_features = ["team_1", "team_2", "venue"]
     numeric_features = [
         "team_1_recent_win_rate",
@@ -104,9 +109,7 @@ def build_model_pipeline(n_estimators: int = 150, learning_rate: float = 0.2, ca
         learning_rate=learning_rate,
         random_state=42,
     )
-    model = CalibratedClassifierCV(base_model, method="isotonic", cv=3) if calibrated else base_model
-
-    return Pipeline(steps=[("preprocessor", preprocessor), ("model", model)])
+    return Pipeline(steps=[("preprocessor", preprocessor), ("model", base_model)])
 
 
 def build_prefit_calibrated_model(fitted_model, x_calibration, y_calibration, method: str = "sigmoid"):

@@ -390,7 +390,7 @@ def make_match_features(match_row: pd.Series, state: dict, season: int = 2026) -
     team_2 = match_row["team_2"]
     match_season = int(pd.to_datetime(match_row["date"]).year) if "date" in match_row and not pd.isna(match_row["date"]) else season
     key = tuple(sorted((team_1, team_2)))
-    h2h_wins = state["head_to_head"].setdefault(key, [0, 0])
+    h2h_wins = state["head_to_head"].get(key, [0, 0])
     if team_1 <= team_2:
         team_1_h2h_wins, team_2_h2h_wins = h2h_wins
     else:

@@ -136,25 +136,86 @@ def _record_result(table: pd.DataFrame, team_1: str, team_2: str, winner: str, t
     _update_nrr(table, team_1, team_2, team_1_score, team_2_score)
 
 
-def _sort_table(table: pd.DataFrame, rng: np.random.Generator) -> pd.DataFrame:
-    sorted_table = _refresh_nrr(table)
-    sorted_table["tie_breaker"] = rng.random(len(sorted_table))
+def _head_to_head_tiebreak(team_a: str, team_b: str, state: dict) -> int:
+    key = tuple(sorted((team_a, team_b)))
+    wins = state["head_to_head"].get(key, [0, 0])
+    if team_a <= team_b:
+        team_a_wins, team_b_wins = wins
+    else:
+        team_b_wins, team_a_wins = wins
+    if team_a_wins != team_b_wins:
+        return -1 if team_a_wins > team_b_wins else 1
+    if team_a != team_b:
+        return -1 if team_a < team_b else 1
+    return 0
+
+
+def _mini_league_metrics(teams: list[str], state: dict) -> dict[str, tuple[int, float]]:
+    metrics: dict[str, tuple[int, float]] = {}
+    for team in teams:
+        mini_wins = 0
+        mini_played = 0
+        for opponent in teams:
+            if team == opponent:
+                continue
+            key = tuple(sorted((team, opponent)))
+            wins = state["head_to_head"].get(key, [0, 0])
+            if team <= opponent:
+                team_wins, opponent_wins = wins
+            else:
+                opponent_wins, team_wins = wins
+            mini_wins += team_wins
+            mini_played += team_wins + opponent_wins
+        metrics[team] = (mini_wins, (mini_wins / mini_played) if mini_played else 0.5)
+    return metrics
+
+
+def _sort_table(table: pd.DataFrame, state: dict) -> pd.DataFrame:
+    sorted_table = _refresh_nrr(table).reset_index()
     sorted_table = sorted_table.sort_values(
-        by=["points", "nrr", "wins", "tie_breaker"],
-        ascending=[False, False, False, False],
-    )
-    return sorted_table.drop(columns=["tie_breaker"])
+        by=["points", "nrr", "wins", "team"],
+        ascending=[False, False, False, True],
+        kind="mergesort",
+    ).reset_index(drop=True)
+
+    grouped = sorted_table.groupby(["points", "nrr", "wins"], sort=False, dropna=False)
+    ordered_groups: list[pd.DataFrame] = []
+    for _, group in grouped:
+        if len(group) == 2:
+            teams = group["team"].tolist()
+            if _head_to_head_tiebreak(teams[0], teams[1], state) > 0:
+                group = group.iloc[::-1].reset_index(drop=True)
+        elif len(group) > 2:
+            metrics = _mini_league_metrics(group["team"].tolist(), state)
+            group = group.assign(
+                mini_wins=group["team"].map(lambda team: metrics[team][0]),
+                mini_win_rate=group["team"].map(lambda team: metrics[team][1]),
+            ).sort_values(
+                by=["mini_wins", "mini_win_rate", "team"],
+                ascending=[False, False, True],
+                kind="mergesort",
+            ).drop(columns=["mini_wins", "mini_win_rate"]).reset_index(drop=True)
+        ordered_groups.append(group)
+
+    return pd.concat(ordered_groups, ignore_index=True).set_index("team")
+
+
+def _team_1_bats_first_probability(features: pd.DataFrame) -> float:
+    row = features.iloc[0]
+    team_1_style = float(row["team_1_batting_first_win_rate"]) - float(row["team_1_chasing_win_rate"])
+    team_2_style = float(row["team_2_batting_first_win_rate"]) - float(row["team_2_chasing_win_rate"])
+    style_edge = np.clip(team_1_style - team_2_style, -1.0, 1.0)
+    venue_bias = float(row["venue_batting_first_win_rate"]) - 0.5
+    probability = 0.5 + 0.22 * style_edge + 0.08 * venue_bias
+    return float(np.clip(probability, 0.15, 0.85))
 
 
 def _simulate_match(model, match_row: pd.Series, state: dict, rng: np.random.Generator) -> tuple[str, float, float, float]:
     features = make_match_features(match_row, state)
     win_probability = float(model.predict_proba(features)[:, 1][0])
     winner = match_row["team_1"] if rng.random() < win_probability else match_row["team_2"]
-    batting_first_wins = rng.random() < float(features.iloc[0]["venue_batting_first_win_rate"])
-    if winner == match_row["team_1"]:
-        current_batted_first = "team_1" if batting_first_wins else "team_2"
-    else:
-        current_batted_first = "team_2" if batting_first_wins else "team_1"
+    team_1_batted_first = rng.random() < _team_1_bats_first_probability(features)
+    current_batted_first = "team_1" if team_1_batted_first else "team_2"
     team_1_score, team_2_score = _estimate_scores(
         features,
         state,
@@ -206,7 +267,7 @@ def simulate_tournament(model, fixtures: pd.DataFrame, teams: list[str], initial
             winner, _, team_1_score, team_2_score = _simulate_match(model, match_row, state, rng)
             _record_result(table, match.team_1, match.team_2, winner, team_1_score, team_2_score)
 
-        sorted_table = _sort_table(table, rng)
+        sorted_table = _sort_table(table, state)
         top_four = sorted_table.head(4).index.tolist()
         q1_winner = _playoff_match(model, top_four[0], top_four[1], state, rng, PLAYOFF_VENUES["qualifier_1"])
         q1_loser = top_four[1] if q1_winner == top_four[0] else top_four[0]
